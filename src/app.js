@@ -6,7 +6,7 @@ const authRoutes = require('./routes/auth.routes');
 
 const app = express();
 
-// 🔥 ESTO ES CLAVE
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
