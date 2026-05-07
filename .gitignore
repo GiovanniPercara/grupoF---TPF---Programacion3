@@ -1,4 +1,10 @@
+<<<<<<< Updated upstream
 node_modules/
 .env
 dist/
 coverage/
+=======
+node_modules
+.env
+.vscode
+>>>>>>> Stashed changes

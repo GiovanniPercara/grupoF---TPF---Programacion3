@@ -1,25 +1,30 @@
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
+import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
 
-const authRoutes = require('./routes/auth.routes');
+import authRoutes from './routes/v1/auth.routes.js';
+import turnoRoutes from './routes/v1/turno.routes.js';
+
+dotenv.config();
 
 const app = express();
 
-// 🔥 ESTO ES CLAVE
+// Middlewares
+app.use(cors());
+app.use(morgan('dev'));
 app.use(express.json());
 
+// Ruta principal
 app.get('/', (req, res) => {
   res.send('Servidor funcionando 🚀');
 });
 
-
-app.use(cors());
-app.use(morgan('dev'));
-
+// Rutas
 app.use('/api/auth', authRoutes);
+app.use('/api/turnos', turnoRoutes);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`);

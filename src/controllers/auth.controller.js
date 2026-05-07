@@ -1,19 +1,43 @@
-const { login } = require('../services/auth.service');
+import { login, register } from '../services/auth.service.js';
 
 const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
+    const resultado = await login(email, password);
 
-    const usuario = await login(email, password);
-
-    res.json({
+    return res.status(200).json({
+      ok: true,
       message: 'Login correcto',
+      usuario: resultado.usuario,
+      token: resultado.token
+    });
+
+  } catch (error) {
+    if (error.message === 'Credenciales inválidas') {
+      return res.status(401).json({ ok: false, error: error.message });
+    }
+    return res.status(500).json({ ok: false, error: 'Error interno del servidor' });
+  }
+};
+
+const registerController = async (req, res) => {
+  try {
+    const { documento, nombres, apellido, email, password } = req.body;
+    const usuario = await register({ documento, nombres, apellido, email, password });
+
+    return res.status(201).json({
+      ok: true,
+      message: 'Usuario registrado correctamente',
       usuario
     });
 
   } catch (error) {
-    res.status(401).json({ error: error.message });
+    if (error.message === 'El documento ya está registrado' ||
+        error.message === 'El email ya está registrado') {
+      return res.status(409).json({ ok: false, error: error.message });
+    }
+    return res.status(500).json({ ok: false, error: 'Error interno del servidor' });
   }
 };
 
-module.exports = { loginController };
+export { loginController, registerController };
