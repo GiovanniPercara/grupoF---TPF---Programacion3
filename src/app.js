@@ -22,9 +22,9 @@ app.get('/', (req, res) => {
 });
 
 // Rutas
-app.use('/api/auth', authRoutes);
-app.use('/api/turnos', turnoRoutes);
-app.use('/api/pacientes', pacienteRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/turnos', turnoRoutes);
+app.use('/api/v1/pacientes', pacienteRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
