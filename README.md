@@ -1,5 +1,5 @@
 
-GRUPOf---TPF---Programacion3
+GRUPO F ---TPF---Programacion3
 
 Pre-entrega de Trabajo Integrador — Programación III (Grupo F)
 
@@ -73,23 +73,30 @@ Testing: Bruno
 http://localhost:3000/api/pacientes
 
 📌 Endpoints disponibles
+
 🔹 Obtener todos los pacientes
 GET /api/pacientes
+
 🔹 Obtener paciente por ID
 GET /api/pacientes/:id
 
 Ejemplo:
 http://localhost:3000/api/pacientes/1
 
+
 ➕ Crear paciente
+
 POST /api/pacientes
+
 Body (JSON):
+
 {
   "id_usuario": 5,
   "id_obra_social": 1
 }
 
 ✏️ Actualizar paciente
+
 PUT /api/pacientes/:id
 
 Body:
@@ -98,19 +105,27 @@ Body:
 }
 
 🗑️ Eliminar paciente (Soft Delete)
+
 DELETE /api/pacientes/:id
 
 🔄 Flujo recomendado de prueba
 
 GET → verificar datos existentes
+
 POST → crear paciente
+
 GET por ID → validar creación
+
 PUT → actualizar datos
+
 DELETE → desactivar paciente
+
 GET → verificar cambios
 
 🚀 Ejecución del proyecto
+
 npm install
+
 npm run dev
 
 Servidor disponible en:
@@ -118,6 +133,7 @@ Servidor disponible en:
 http://localhost:3000
 
 📌 Notas Finales
+
 Validaciones: Se utiliza express-validator para asegurar que los IDs sean numéricos y obligatorios.
 
 Integridad: Los pacientes dependen de un usuario previo en la base de datos.
