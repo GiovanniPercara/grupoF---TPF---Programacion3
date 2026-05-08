@@ -1,5 +1,5 @@
 
-grupoF---TPF---Programacion3
+GRUPOf---TPF---Programacion3
 
 Pre-entrega de Trabajo Integrador — Programación III (Grupo F)
 
