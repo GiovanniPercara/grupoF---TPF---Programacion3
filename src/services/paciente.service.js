@@ -4,8 +4,8 @@ export const listarTodo = async () => {
   return await pacienteRepo.findAll();
 };
 
-export const buscarPorId = async (id_usuario) => {
-  return await pacienteRepo.findByUsuarioId(id_usuario);
+export const buscarPorId = async (id) => {
+  return await pacienteRepo.findById(id);
 };
 
 export const agregar = async (datos) => {

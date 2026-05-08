@@ -6,16 +6,12 @@ import validate from '../../middlewares/validate.js';
 
 const router = express.Router();
 
-// obtiene todos los pacientes
-router.get('/', verificarToken, pCtrl.getAll);
+router.get('/', pCtrl.getAll);
 
-// Obtener un paciente por ID
-router.get('/:id', verificarToken, pCtrl.getOne);
+router.get('/:id', pCtrl.getOne);
 
-// Crea un nuevo paciente
-router.post('/', verificarToken, pacienteValidator, validate, pCtrl.create);
+router.post('/', pacienteValidator, validate, pCtrl.create);
 
-// Elimina un paciente por ID 
-router.delete('/:id', verificarToken, pCtrl.remove);
+router.delete('/:id', pCtrl.remove);
 
 export default router;
