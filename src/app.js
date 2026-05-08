@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import authRoutes from './routes/v1/auth.routes.js';
 import turnoRoutes from './routes/v1/turno.routes.js';
 import pacienteRoutes from './routes/v1/paciente.routes.js';
+import adminRoutes from './routes/v1/admin.routes.js';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/turnos', turnoRoutes);
 app.use('/api/v1/pacientes', pacienteRoutes);
+app.use('/api/v1/admin', adminRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
