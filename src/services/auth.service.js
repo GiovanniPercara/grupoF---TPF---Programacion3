@@ -1,33 +1,88 @@
-const crypto = require('crypto');
-const pool = require('../config/db');
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 
-const login = async (email, password) => {
 
-  // 🔹 Buscar usuario
-  const [rows] = await pool.query(
-    'SELECT * FROM usuarios WHERE email = ? AND activo = 1',
-    [email]
-  );
+import {findByEmail,findByDocumento,createUsuario} from '../repositories/auth.repository.js';
 
-  const usuario = rows[0];
+const login = async (email, password) => {const usuario = await findByEmail(email);
 
   if (!usuario) {
-    throw new Error('Usuario no encontrado');
+    throw new Error('Credenciales inválidas');
   }
 
-  // 🔹 Generar hash
   const hash = crypto
     .createHash('sha256')
     .update(password.trim())
     .digest('hex');
 
-
-  // 🔹 Comparar
   if (hash !== usuario.contrasenia) {
-    throw new Error('Contraseña incorrecta');
+    throw new Error('Credenciales inválidas');
   }
 
-  return usuario;
+  const token = jwt.sign(
+    {
+      id_usuario: usuario.id_usuario,
+      rol: usuario.rol
+    },
+
+    process.env.JWT_SECRET,
+
+    {
+      expiresIn: '8h'
+    }
+  );
+
+  const { contrasenia, ...usuarioSeguro } = usuario;
+
+  return {
+    usuario: usuarioSeguro,
+    token
+  };
 };
 
-module.exports = { login };
+const register = async ({
+  documento,
+  nombres,
+  apellido,
+  email,
+  password
+}) => {
+
+  const docExiste = await findByDocumento(documento);
+
+  if (docExiste) {
+    throw new Error('El documento ya está registrado');
+  }
+
+  const emailExiste = await findByEmail(email);
+
+  if (emailExiste) {
+    throw new Error('El email ya está registrado');
+  }
+
+  const hash = crypto
+    .createHash('sha256')
+    .update(password.trim())
+    .digest('hex');
+
+  const id_usuario = await createUsuario({
+    documento,
+    nombres,
+    apellido,
+    email,
+    hash
+  });
+
+  return {
+    id_usuario,
+    documento,
+    nombres,
+    apellido,
+    email
+  };
+};
+
+export {
+  login,
+  register
+};
