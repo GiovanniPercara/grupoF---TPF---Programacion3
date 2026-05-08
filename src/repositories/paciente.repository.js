@@ -1,12 +1,5 @@
 import pool from '../config/db.js';
 
-const findByUsuarioId = async (id_usuario) => {
-  const [rows] = await pool.query(
-    'SELECT id_paciente FROM pacientes WHERE id_usuario = ?',
-    [id_usuario]
-  );
-  return rows[0] || null;
-};
 //APLICANDO BREAD PACIENTES - PRIMERA ENTREGA 
 // Se enlista todos los pacientes
 const findAll = async () => {
@@ -15,11 +8,13 @@ const findAll = async () => {
 };
 
 //  Obtiene un solo paciente.
-const findById = async (id) => {
-  const [rows] = await pool.query('SELECT * FROM v_pacientes WHERE id_paciente = ?', [id]);
-  return rows || null;
+const findByUsuarioId = async (id_usuario) => {
+  const [rows] = await pool.query(
+    'SELECT id_paciente FROM pacientes WHERE id_usuario = ?',
+    [id_usuario]
+  );
+  return rows[0] || null;
 };
-
 // Crear nuevo paciente
 const save = async (datos) => {
   const { id_usuario, id_obra_social } = datos;
@@ -51,7 +46,6 @@ const softDelete = async (id) => {
 export {
   findByUsuarioId,
   findAll,
-  findById,
   save,
   update,
   softDelete
