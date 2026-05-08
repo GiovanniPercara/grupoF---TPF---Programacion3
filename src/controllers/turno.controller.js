@@ -18,7 +18,7 @@ const crearTurnoController = async (req, res) => {
     return res.status(201).json({
       ok: true,
       message: 'Turno reservado correctamente',
-      turno
+      data: turno
     });
 
   } catch (error) {
@@ -54,7 +54,7 @@ const listarTurnosController = async (req, res) => {
     return res.status(200).json({
       ok: true,
       cantidad: turnos.length,
-      turnos
+      data:turnos
     });
 
   } catch (error) {

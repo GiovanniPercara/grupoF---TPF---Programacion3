@@ -1,3 +1,4 @@
+
 grupoF---TPF---Programacion3
 
 Pre-entrega de Trabajo Integrador — Programación III (Grupo F)
@@ -61,7 +62,6 @@ Testing: Bruno
 │   ├── routes/       # Endpoints
 │   ├── services/     # Lógica de negocio
 │   └── app.js        # Entry point
-├── .env.example      # Referencia de variables
 └── package.json      # Dependencias
 
 
