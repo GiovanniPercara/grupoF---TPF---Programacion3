@@ -7,9 +7,11 @@ const loginController = async (req, res) => {
 
     return res.status(200).json({
       ok: true,
+      data: {
       message: 'Login correcto',
       usuario: resultado.usuario,
       token: resultado.token
+      }
     });
 
   } catch (error) {
@@ -19,6 +21,7 @@ const loginController = async (req, res) => {
     return res.status(500).json({ ok: false, error: 'Error interno del servidor' });
   }
 };
+
 
 const registerController = async (req, res) => {
   try {
