@@ -55,15 +55,14 @@ Testing: Bruno
 📁 Estructura del proyecto
 .
 ├── src/
-│   ├── config/       # Conexión a DB
-│   ├── controllers/  # Manejo de HTTP
-│   ├── middlewares/  # Validaciones
-│   ├── repositories/ # Consultas SQL
-│   ├── routes/       # Endpoints
-│   ├── services/     # Lógica de negocio
-│   └── app.js        # Entry point
-└── package.json      # Dependencias
-
+│   ├── config/       
+│   ├── controllers/  
+│   ├── middlewares/  
+│   ├── repositories/ 
+│   ├── routes/      
+│   ├── services/     
+│   └── app.js        
+└── package.json      
 
 🧪 Pruebas con Bruno
 
