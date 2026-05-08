@@ -53,12 +53,15 @@ Herramientas de Desarrollo: dotenv, cors, morgan, nodemon.
 Testing: Bruno
 
 📁 Estructura del proyecto
-.
-├── src/
+
+
+├─src/
+
 │   ├── config/       
 │   ├── controllers/  
 │   ├── middlewares/  
 │   ├── repositories/ 
+ 
 │   ├── routes/      
 │   ├── services/     
 │   └── app.js        
