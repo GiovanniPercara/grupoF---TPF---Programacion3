@@ -41,9 +41,6 @@ const verificarToken = (req, res, next) => {
 };
 
 
-// =========================
-// VERIFICAR ROL
-// =========================
 
 const verificarRol = (...rolesPermitidos) => {
 
