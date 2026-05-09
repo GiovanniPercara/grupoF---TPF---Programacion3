@@ -1,5 +1,4 @@
-import { crearTurno, listarTurnosPaciente } 
-from '../services/turno.service.js';
+import { crearTurno, listarTurnosPaciente, editarTurno } from '../services/turno.service.js';
 
 const crearTurnoController = async (req, res) => {
   try {
@@ -17,8 +16,10 @@ const crearTurnoController = async (req, res) => {
 
     return res.status(201).json({
       ok: true,
+      data:{
       message: 'Turno reservado correctamente',
       turno
+      }
     });
 
   } catch (error) {
@@ -36,10 +37,11 @@ const crearTurnoController = async (req, res) => {
         error: error.message
       });
     }
+    console.error(error);
 
     return res.status(500).json({
       ok: false,
-      error: 'Error interno del servidor'
+      error:error.message || 'Error interno del servidor'
     });
   }
 };
@@ -53,8 +55,10 @@ const listarTurnosController = async (req, res) => {
 
     return res.status(200).json({
       ok: true,
+      data: {
       cantidad: turnos.length,
       turnos
+      }
     });
 
   } catch (error) {
@@ -73,7 +77,65 @@ const listarTurnosController = async (req, res) => {
   }
 };
 
+const editarTurnoController = async (req,res) => {
+  try {
+    const { id } = req.params;
+    const {
+      id_medico,
+      id_obra_social,
+      fecha_hora
+    } = req.body;
+
+    const turnoActualizado = await editarTurno(
+        id,
+        {
+          id_medico,
+          id_obra_social,
+          fecha_hora
+        }
+      );
+
+    return res.status(200).json({
+      ok: true,
+      mensaje: 'Turno actualizado correctamente',
+      data: turnoActualizado
+    });
+
+  } catch (error) {
+
+    if (error.message ===
+      'El médico ya tiene un turno en ese horario'
+    ) {
+
+      return res.status(409).json({
+        ok: false,
+        error: error.message
+      });
+    }
+
+    if (error.message ===
+      'Turno no encontrado'
+    ) {
+
+      return res.status(404).json({
+        ok: false,
+        error: error.message
+      });
+    }
+
+    console.error(error);
+
+    return res.status(500).json({
+      ok: false,
+      error:
+        error.message ||
+        'Error interno del servidor'
+    });
+  }
+};
+
 export {
   crearTurnoController,
-  listarTurnosController
-};
+  listarTurnosController,
+  editarTurnoController
+}
