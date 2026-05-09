@@ -1,17 +1,18 @@
-function authorize(...rolesPermitidos) {
+const authorize = (...rolesPermitidos) => {
 
-    return (req, res, next) => {
+  return (req, res, next) => {
 
-        if (!rolesPermitidos.includes(req.user.rol)) {
+    if (!rolesPermitidos.includes(req.usuario.rol)) {
 
-            return res.status(403).json({
-                error: 'No tiene autorizacion'
-            });
+      return res.status(403).json({
+        ok: false,
+        error: 'No tiene autorización'
+      });
 
-        }
+    }
 
-        next();
-    };
-}
+    next();
+  };
+};
 
-module.exports = authorize;
+export { authorize };

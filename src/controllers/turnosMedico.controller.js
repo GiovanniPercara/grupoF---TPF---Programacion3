@@ -1,38 +1,61 @@
-const turnosService = require('../services/turnos.service');
+import * as turnosService from '../services/turnosMedico.service.js';
 
-async function misTurnos(req, res){
-    try{
-        const medicoId = req.user.id;
+const misTurnos = async (req, res) => {
 
-        const turnos = await turnosService.getTurnosMedico(medicoId);
+  try {
 
-        res.json(turnos);
-    }   catch (error) {
-        res.status(500).json({
-             error: 'Error al obtener turnos'
-            });
-    }
-}
+    const medicoId = req.usuario.id_usuario;
 
-async function atenderTurno(req, res) {
-    try{
-        const turnoId = parseInt(req.params.id);
-        const medicoId = req.user.id;
-        const resultado = await turnosService.atenderTurno(
-            turnoId,
-            medicoId
-        );
+    const turnos = await turnosService.getTurnosMedico(
+      medicoId
+    );
 
-        res.status(200).json(resultado);
+    return res.status(200).json({
+      ok: true,
+      cantidad: turnos.length,
+      data: turnos
+    });
 
-    } catch (error) {
-        res.status(error.status || 500).json({
-            error: error.message || 'Error interno'
-        });
-    }
-    
-}
-module.exports = {
-    misTurnos,
-    atenderTurno
+  } catch (error) {
+
+    return res.status(500).json({
+      ok: false,
+      error: 'Error al obtener turnos'
+    });
+  }
+};
+
+const atenderTurno = async (req, res) => {
+
+  try {
+
+    const turnoId = parseInt(req.params.id);
+
+    const medicoId = req.usuario.id_usuario;
+
+    const resultado =
+      await turnosService.atenderTurno(
+        turnoId,
+        medicoId
+      );
+
+    return res.status(200).json({
+      ok: true,
+      data: resultado
+    });
+
+  } catch (error) {
+
+    return res.status(
+      error.status || 500
+    ).json({
+      ok: false,
+      error: error.message || 'Error interno'
+    });
+  }
+};
+
+export {
+  misTurnos,
+  atenderTurno
 };

@@ -1,39 +1,57 @@
-const turnosRepository = require('../repositories/turnos.repository');
+import * as turnosRepository
+from '../repositories/turnosMedico.repository.js';
 
-async function getTurnosMedico(medicoId) {
-    return await turnosRepository.obtenerTurnosPorMedico(medicoId);
-}
-async function atenderTurno(turnoId, medicoId) {
-    const turno = await turnosRepository.buscarTurnoPorId(turnoId);
+const getTurnosMedico = async (medicoId) => {
 
-    if (!turno) {
-        throw {
-            status: 404,
-            message: 'Turno no encontrado'
-        };
-    }
+  return await turnosRepository.obtenerTurnosPorMedico(
+    medicoId
+  );
+};
 
-    if (turno.id_medico !== medicoId) {
-        throw {
-            status:403,
-            message: 'No autorizado para este turno'
-        };
-    }
+const atenderTurno = async (
+  turnoId,
+  medicoId
+) => {
 
-    if (turno.atendido === 1) {
-        throw {
-            status: 400,
-            message: 'El turno ya fue atendido'
-        };
-    }
+  const turno =
+    await turnosRepository.buscarTurnoPorId(
+      turnoId
+    );
 
-    await turnosRepository.marcarTurnoAtendido(turnoId);
-    return {
-        message: 'Turno marcado como atendido'
+  if (!turno) {
+
+    throw {
+      status: 404,
+      message: 'Turno no encontrado'
     };
-}
+  }
 
-module.exports = {
-    getTurnosMedico,
-    atenderTurno
+  if (turno.id_medico !== medicoId) {
+
+    throw {
+      status: 403,
+      message: 'No autorizado para este turno'
+    };
+  }
+
+  if (turno.atendido === 1) {
+
+    throw {
+      status: 400,
+      message: 'El turno ya fue atendido'
+    };
+  }
+
+  await turnosRepository.marcarTurnoAtendido(
+    turnoId
+  );
+
+  return {
+    message: 'Turno marcado como atendido'
+  };
+};
+
+export {
+  getTurnosMedico,
+  atenderTurno
 };
