@@ -28,8 +28,45 @@ const editarObraSocial = async (
   return actualizado;
 };
 
+// ESPECIALIDADES
+
+const listarEspecialidades = async () => {
+  return await adminRepository.findAllEspecialidades();
+};
+
+const crearEspecialidad = async (
+  especialidad
+) => {
+  return await adminRepository.createEspecialidad(
+    especialidad
+  );
+};
+
+const editarEspecialidad = async (
+  id_especialidad,
+  especialidad
+) => {
+
+  const actualizado =
+    await adminRepository.updateEspecialidad(
+      id_especialidad,
+      especialidad
+    );
+
+  if (!actualizado) {
+    throw new Error(
+      'Especialidad no encontrada'
+    );
+  }
+
+  return actualizado;
+};
+
 export {
   listarObrasSociales,
   crearObraSocial,
-  editarObraSocial
+  editarObraSocial,
+  listarEspecialidades,
+  crearEspecialidad,
+  editarEspecialidad
 };
