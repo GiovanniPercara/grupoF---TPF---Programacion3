@@ -1,5 +1,5 @@
 import * as pService from '../services/paciente.service.js';
-
+import { validationResult } from 'express-validator';
 
 // GET TODOS
 export const getAll = async (req, res) => {

@@ -53,7 +53,7 @@ const update = async (id, datos) => {
   return result.affectedRows > 0;
 };
 
-// DELETE LOGICO -  primero buscamos el paciente para obtener su id_usuario, y luego desactivarlo
+/// DELETE LOGICO -  primero buscamos el paciente para obtener su id_usuario, y luego desactivarlo
 const softDelete = async (id) => {
   const sql = `
     UPDATE usuarios

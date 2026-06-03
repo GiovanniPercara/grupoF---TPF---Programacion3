@@ -12,6 +12,8 @@ router.get('/:id', pCtrl.getOne);
 
 router.post('/', pacienteValidator, validate, pCtrl.create);
 
+router.put('/:id', pacienteValidator, validate, pCtrl.edit); 
+
 router.delete('/:id', pCtrl.remove);
 
 export default router;

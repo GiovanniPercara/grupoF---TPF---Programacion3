@@ -10,12 +10,10 @@ export const buscarPorId = async (id) => {
   return paciente;
 };
 
-
 export const agregar = async (datos) => {
   const id = await pacienteRepo.save(datos);
   return id;
 };
-
 
 export const editar = async (id, datos) => {
   const existe = await pacienteRepo.findById(id);
