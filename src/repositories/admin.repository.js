@@ -42,8 +42,66 @@ const updateObraSocial = async (
   return result.affectedRows > 0;
 };
 
+
+///////////////////////////////////////
+
+// LISTAR ESPECIALIDADES
+const findAllEspecialidades = async () => {
+  const [rows] = await pool.query(
+    `SELECT id_especialidad, nombre, descripcion, activo
+     FROM especialidades
+     WHERE activo = 1
+     ORDER BY nombre ASC`
+  );
+
+  return rows;
+};
+
+// CREAR ESPECIALIDADES
+const createEspecialidad = async ({
+  nombre,
+  descripcion
+}) => {
+
+  const [result] = await pool.query(
+    `INSERT INTO especialidades
+     (nombre, descripcion, activo)
+     VALUES (?, ?, 1)`,
+    [nombre, descripcion]
+  );
+
+  return result.insertId;
+};
+
+
+// EDITAR ESPECIALIDADES
+const updateEspecialidad = async (
+  id_especialidad,
+  { nombre, descripcion }
+) => {
+
+  const [result] = await pool.query(
+    `UPDATE especialidades
+     SET nombre = ?,
+         descripcion = ?
+     WHERE id_especialidad = ?
+       AND activo = 1`,
+    [nombre, descripcion, id_especialidad]
+  );
+
+  return result.affectedRows > 0;
+};
+
+/////////////////////////////////////////////////////
+
+
+
 export {
   findAllObrasSociales,
   createObraSocial,
-  updateObraSocial
+  updateObraSocial,
+
+  findAllEspecialidades,
+  createEspecialidad,
+  updateEspecialidad
 };
