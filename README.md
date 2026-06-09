@@ -24,7 +24,7 @@ Repositories: Interacción directa con la base de datos (MySQL).
 
 👥 Integrantes
 
-Lucia Allassia
+Lucía Allassia
 Martina Ascona
 Estrella Cardozo
 Giovanni Percara
