@@ -8,7 +8,7 @@ import validate from '../../middlewares/validate.js';
 
 const router = express.Router();
 
-// POST /api/v1/medicos-obras-sociales
+
 router.post(
   '/',
   verificarToken,
