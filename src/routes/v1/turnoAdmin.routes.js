@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { registrarTurnoAdminController } from '../../controllers/turnoAdmin.controller.js';
+import { registrarTurnoAdminController } from '../../controllers/turnoAdmin.controllers.js';
 import { registrarTurnoAdminValidator } from '../../middlewares/turnoAdmin.validator.js';
 import { verificarToken } from '../../middlewares/auth.middleware.js';
 import { authorize } from '../../middlewares/role.middleware.js';
