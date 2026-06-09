@@ -4,7 +4,7 @@ import {
   listarObrasSocialesController,
   crearObraSocialController,
   editarObraSocialController
-} from '../../controllers/admin.controller.js';
+} from '../../controllers/admin.controllers.js';
 
 import { verificarToken } from '../../middlewares/auth.middleware.js';
 import { soloAdmin } from '../../middlewares/admin.middleware.js';
