@@ -18,7 +18,10 @@ const loginController = async (req, res) => {
     if (error.message === 'Credenciales inválidas') {
       return res.status(401).json({ ok: false, error: error.message });
     }
-    return res.status(500).json({ ok: false, error: 'Error interno del servidor' });
+      return res.status(500).json({
+    ok: false,
+    error: error.message
+  });
   }
 };
 
@@ -39,7 +42,10 @@ const registerController = async (req, res) => {
         error.message === 'El email ya está registrado') {
       return res.status(409).json({ ok: false, error: error.message });
     }
-    return res.status(500).json({ ok: false, error: 'Error interno del servidor' });
+     return res.status(500).json({
+    ok: false,
+    error: error.message
+  });
   }
 };
 

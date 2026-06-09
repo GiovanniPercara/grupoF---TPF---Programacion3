@@ -13,6 +13,7 @@ import medicoObraSocialRoutes from './routes/v1/medicoObraSocial.routes.js';
 import pacienteObraSocialRoutes from './routes/v1/pacienteObraSocial.routes.js';
 import turnoAdminRoutes from './routes/v1/turnoAdmin.routes.js';
 import estadisticasRoutes from './routes/v1/estadisticas.routes.js';
+import turnosMedicoRoutes from './routes/v1/turnosMedico.routes.js';
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/turnos', turnoRoutes);
 app.use('/api/v1/pacientes', pacienteRoutes);
 app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/turnos-medico', turnosMedicoRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.use('/api/v1/medicos-especialidades', medicoEspecialidadRoutes);
