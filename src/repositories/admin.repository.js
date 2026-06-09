@@ -43,7 +43,7 @@ const updateObraSocial = async (
 };
 
 
-///////////////////////////////////////
+//ESPECIALIDADES
 
 // LISTAR ESPECIALIDADES
 const findAllEspecialidades = async () => {
@@ -92,7 +92,6 @@ const updateEspecialidad = async (
   return result.affectedRows > 0;
 };
 
-/////////////////////////////////////////////////////
 
 
 

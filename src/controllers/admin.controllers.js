@@ -189,6 +189,7 @@ export {
   listarObrasSocialesController,
   crearObraSocialController,
   editarObraSocialController,
+  
   listarEspecialidadesController,
   crearEspecialidadController,
   editarEspecialidadController
