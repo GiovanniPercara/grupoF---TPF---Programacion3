@@ -22,7 +22,7 @@ router.use(soloAdmin);
 
 
 
-// OBRAS SOCIALES
+//// OBRAS SOCIALES ////
 
 // LISTAR
 router.get(
@@ -44,6 +44,27 @@ router.put(
   obraSocialValidator,
   validate,
   editarObraSocialController
+);
+
+//// ESPECIALIDADES ////
+
+router.get(
+  '/especialidades',
+  listarEspecialidadesController
+);
+
+router.post(
+  '/especialidades',
+  especialidadValidator,
+  validate,
+  crearEspecialidadController
+);
+
+router.put(
+  '/especialidades/:id',
+  especialidadValidator,
+  validate,
+  editarEspecialidadController
 );
 
 export default router;
