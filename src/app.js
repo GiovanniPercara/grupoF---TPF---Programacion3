@@ -12,6 +12,7 @@ import medicoEspecialidadRoutes from './routes/v1/medicoEspecialidad.routes.js';
 import medicoObraSocialRoutes from './routes/v1/medicoObraSocial.routes.js';
 import pacienteObraSocialRoutes from './routes/v1/pacienteObraSocial.routes.js';
 import turnoAdminRoutes from './routes/v1/turnoAdmin.routes.js';
+import estadisticasRoutes from './routes/v1/estadisticas.routes.js';
 
 dotenv.config();
 
@@ -38,6 +39,8 @@ app.use('/api/v1/medicos-especialidades', medicoEspecialidadRoutes);
 app.use('/api/v1/medicos-obras-sociales', medicoObraSocialRoutes);
 app.use('/api/v1/pacientes-obras-sociales', pacienteObraSocialRoutes);
 app.use('/api/v1/admin/turnos', turnoAdminRoutes);
+app.use('/api/v1/estadisticas', estadisticasRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`);
