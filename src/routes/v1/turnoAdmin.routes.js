@@ -1,9 +1,9 @@
 import express from 'express';
 
-import { registrarTurnoAdminController } from '../../controllers/turnoAdmin.controllers.js';
+import { registrarTurnoAdminController } from '../../controllers/turnoAdmin.controller.js';
 import { registrarTurnoAdminValidator } from '../../middlewares/turnoAdmin.validator.js';
 import { verificarToken } from '../../middlewares/auth.middleware.js';
-import { authorize } from '../../middlewares/role.middleware.js';
+import { soloAdmin } from '../../middlewares/admin.middleware.js';
 import validate from '../../middlewares/validate.js';
 
 const router = express.Router();
@@ -12,7 +12,7 @@ const router = express.Router();
 router.post(
   '/',
   verificarToken,
-  authorize(3),
+  soloAdmin,
   registrarTurnoAdminValidator,
   validate,
   registrarTurnoAdminController

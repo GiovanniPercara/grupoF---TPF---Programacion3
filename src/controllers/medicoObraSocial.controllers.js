@@ -1,4 +1,4 @@
-import { asociarMedicoObraSocial } from '../services/medicoObraSocial.service.js';
+import { asociarMedicoObraSocial } from '../services/medicoObraSocial.services.js';
 
 const asociarMedicoObraSocialController = async (req, res) => {
   try {

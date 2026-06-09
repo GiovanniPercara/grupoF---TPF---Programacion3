@@ -1,9 +1,9 @@
 import express from 'express';
 
-import { asociarMedicoObraSocialController } from '../../controllers/medicoObraSocial.controller.js';
+import { asociarMedicoObraSocialController } from '../../controllers/medicoObraSocial.controllers.js';
 import { asociarMedicoObraSocialValidator } from '../../middlewares/medicoObraSocial.validator.js';
 import { verificarToken } from '../../middlewares/auth.middleware.js';
-import { authorize } from '../../middlewares/role.middleware.js';
+import { soloAdmin } from '../../middlewares/admin.middleware.js';
 import validate from '../../middlewares/validate.js';
 
 const router = express.Router();
@@ -12,7 +12,7 @@ const router = express.Router();
 router.post(
   '/',
   verificarToken,
-  authorize(3),
+  soloAdmin,
   asociarMedicoObraSocialValidator,
   validate,
   asociarMedicoObraSocialController

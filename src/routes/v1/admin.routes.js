@@ -3,14 +3,18 @@ import express from 'express';
 import {
   listarObrasSocialesController,
   crearObraSocialController,
-  editarObraSocialController
+  editarObraSocialController,
+  listarEspecialidadesController,
+  crearEspecialidadController,
+  editarEspecialidadController
 } from '../../controllers/admin.controllers.js';
 
 import { verificarToken } from '../../middlewares/auth.middleware.js';
 import { soloAdmin } from '../../middlewares/admin.middleware.js';
 
 import {
-  obraSocialValidator
+  obraSocialValidator,
+  especialidadValidator
 } from '../../middlewares/admin.validator.js';
 
 import validate from '../../middlewares/validate.js';
