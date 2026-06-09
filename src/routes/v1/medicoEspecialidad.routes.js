@@ -8,6 +8,7 @@ import validate from '../../middlewares/validate.js';
 
 const router = express.Router();
 
+// PUT /api/v1/medicos-especialidades
 router.put(
   '/',
   verificarToken,
