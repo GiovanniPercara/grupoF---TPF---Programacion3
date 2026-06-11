@@ -6,15 +6,30 @@ const options = {
     info: {
       title: 'API Clínica Grupo F',
       version: '1.0.0',
-      description: 'Documentación de la API de la Clínica Grupo F'
+      description: 'Sistema de gestión clínica - turnos, pacientes y administración'
     },
     servers: [
       {
         url: 'http://localhost:3000'
       }
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    },
+    security: [
+      {
+        bearerAuth: []
+      }
     ]
   },
-  apis: ['./src/routes/v1/*.js']
+
+  apis: ['./src/routes/v1/**/*.js']
 };
 
 const swaggerSpec = swaggerJsdoc(options);

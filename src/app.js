@@ -15,6 +15,8 @@ import turnoAdminRoutes from './routes/v1/turnoAdmin.routes.js';
 import estadisticasRoutes from './routes/v1/estadisticas.routes.js';
 import turnosMedicoRoutes from './routes/v1/turnosMedico.routes.js';
 import reporteRoutes from './routes/v1/reporte.routes.js';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './swagger.js';
 
 dotenv.config();
 
@@ -24,6 +26,11 @@ const app = express();
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
 
 // Ruta principal
 app.get('/', (req, res) => {
