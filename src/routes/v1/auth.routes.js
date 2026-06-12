@@ -38,12 +38,12 @@
  * @swagger
  * /api/v1/auth/register:
  * post:
- * summary: Registrar usuario
+ * summary: Registrar usuario con foto de perfil opcional
  * tags: [Auth]
  * requestBody:
  * required: true
  * content:
- * application/json:
+ * multipart/form-data:
  * schema:
  * type: object
  * required:
@@ -63,19 +63,22 @@
  * type: string
  * password:
  * type: string
+ * foto:
+ * type: string
+ * format: binary
  * responses:
  * 201:
- * description: Usuario creado
+ * description: Usuario creado exitosamente
  */
 import express from 'express';
-
-import {loginController,registerController} from '../../controllers/auth.controller.js';
-import {registerValidator,loginValidator} from '../../middlewares/auth.validator.js';
+import { loginController, registerController } from '../../controllers/auth.controller.js';
+import { registerValidator, loginValidator } from '../../middlewares/auth.validator.js';
+import { upload } from '../../middlewares/multerUpload.middleware.js';
 import validate from '../../middlewares/validate.js';
 
 const router = express.Router();
 
-router.post('/login',loginValidator,validate,loginController);
-router.post('/register',registerValidator,validate,registerController);
+router.post('/login', loginValidator, validate, loginController);
+router.post('/register', upload.single('foto'), registerValidator, validate, registerController);
 
 export default router;
