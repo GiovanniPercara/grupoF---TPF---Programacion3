@@ -1,63 +1,83 @@
 /**
  * @swagger
  * tags:
- *   name: Pacientes
- *   description: Gestión de pacientes
+ * name: Pacientes
+ * description: Gestión de pacientes
  */
 
 /**
  * @swagger
  * /api/v1/pacientes:
- *   get:
- *     summary: Obtener todos los pacientes
- *     tags: [Pacientes]
- *     responses:
- *       200:
- *         description: Lista de pacientes
+ * get:
+ * summary: Obtener todos los pacientes
+ * tags: [Pacientes]
+ * responses:
+ * 200:
+ * description: Lista de pacientes
  *
- *   post:
- *     summary: Crear paciente
- *     tags: [Pacientes]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - id_usuario
- *               - id_obra_social
- *             properties:
- *               id_usuario:
- *                 type: number
- *               id_obra_social:
- *                 type: number
- *     responses:
- *       201:
- *         description: Paciente creado
+ * post:
+ * summary: Crear paciente
+ * tags: [Pacientes]
+ * requestBody:
+ * required: true
+ * content:
+ * application/json:
+ * schema:
+ * type: object
+ * required:
+ * - id_usuario
+ * - id_obra_social
+ * properties:
+ * id_usuario:
+ * type: number
+ * id_obra_social:
+ * type: number
+ * responses:
+ * 201:
+ * description: Paciente creado
  */
 
 /**
  * @swagger
  * /api/v1/pacientes/{id}:
- *   get:
- *     summary: Obtener paciente por ID
- *     tags: [Pacientes]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *     responses:
- *       200:
- *         description: Paciente encontrado
+ * get:
+ * summary: Obtener paciente por ID
+ * tags: [Pacientes]
+ * parameters:
+ * - in: path
+ * name: id
+ * required: true
+ * schema:
+ * type: integer
+ * responses:
+ * 200:
+ * description: Paciente encontrado
  *
- *   put:
- *     summary: Editar paciente
- *     tags: [Pacientes]
+ * put:
+ * summary: Editar paciente
+ * tags: [Pacientes]
+ * parameters:
+ * - in: path
+ * name: id
+ * required: true
+ * schema:
+ * type: integer
+ * responses:
+ * 200:
+ * description: Paciente editado
  *
- *   delete:
- *     summary: Eliminar paciente (soft delete)
- *     tags: [Pacientes]
+ * delete:
+ * summary: Eliminar paciente (soft delete)
+ * tags: [Pacientes]
+ * parameters:
+ * - in: path
+ * name: id
+ * required: true
+ * schema:
+ * type: integer
+ * responses:
+ * 200:
+ * description: Paciente eliminado
  */
 import express from 'express';
 import * as pCtrl from '../../controllers/paciente.controller.js';
