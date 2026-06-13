@@ -1,49 +1,17 @@
-/**
- * @swagger
- * tags:
- * name: Reportes
- * description: Descarga de documentos e informes clínicos
- */
+import * as reporteService from "../services/reporte.service.js";
 
-/**
- * @swagger
- * /api/v1/reportes:
- * get:
- * summary: Descargar reporte en formato PDF con el historial general de la clínica usando un Stored Procedure
- * tags: [Reportes]
- * security:
- * - bearerAuth: []
- * responses:
- * 200:
- * description: Archivo PDF del historial clínico generado exitosamente
- */
+export const getReportePaciente = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-/**
- * @swagger
- * /api/v1/reportes/paciente/{id}:
- * get:
- * summary: Descargar reporte en formato PDF de un paciente específico
- * tags: [Reportes]
- * security:
- * - bearerAuth: []
- * parameters:
- * - in: path
- * name: id
- * required: true
- * schema:
- * type: integer
- * responses:
- * 200:
- * description: Archivo PDF del reporte generado y descargado correctamente
- */
-import { Router } from 'express';
-import * as reporteCtrl from '../../controllers/reporte.controller.js';
-import { verificarToken } from '../../middlewares/auth.middleware.js';
+    await reporteService.generarReportePaciente(id, res);
 
-const router = Router();
+  } catch (error) {
+    console.error(error);
 
-router.get('/', verificarToken, reporteCtrl.getReporteGeneral);
-
-router.get('/paciente/:id', verificarToken, reporteCtrl.getReportePaciente);
-
-export default router;
+    return res.status(500).json({
+      ok: false,
+      error: error.message,
+    });
+  }
+};
