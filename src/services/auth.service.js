@@ -1,22 +1,13 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
-import {
-  findByEmail,
-  findByDocumento,
-  createUsuario
-} from '../repositories/auth.repository.js';
 
-const login = async (email, password) => {
+import {findByEmail,findByDocumento,createUsuario} from '../repositories/auth.repository.js';
 
-  const usuario = await findByEmail(email);
+const login = async (email, password) => {const usuario = await findByEmail(email);
 
   if (!usuario) {
     throw new Error('Credenciales inválidas');
-  }
-
-  if (typeof password !== 'string') {
-    throw new Error('Password inválida');
   }
 
   const hash = crypto
@@ -28,16 +19,33 @@ const login = async (email, password) => {
     throw new Error('Credenciales inválidas');
   }
 
-  const token = jwt.sign(
-    {
-      id_usuario: usuario.id_usuario,
-      rol: usuario.rol
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: '8h'
-    }
-  );
+  // const token = jwt.sign(
+  //   {
+  //     id_usuario: usuario.id_usuario,
+  //     rol: usuario.rol
+  //   },
+
+  //   process.env.JWT_SECRET,
+
+  //   {
+  //     expiresIn: '8h'
+  //   }
+  // );
+
+  console.log('USUARIO EN LOGIN:', usuario);
+
+const token = jwt.sign(
+  {
+    id_usuario: usuario.id_usuario,
+    rol: usuario.rol
+  },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: '8h'
+  }
+);
+
+console.log('TOKEN GENERADO:', token);
 
   const { contrasenia, ...usuarioSeguro } = usuario;
 

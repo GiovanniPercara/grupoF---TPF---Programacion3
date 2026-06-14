@@ -1,27 +1,57 @@
-import express from 'express';
+import { Router } from "express";
 
-import {misTurnos, atenderTurno} from '../../controllers/turnosMedico.controller.js';
+/**
+ * @swagger
+ * tags:
+ *   - name: Turnos Médico
+ *     description: Endpoints exclusivos de gestión médica para profesionales independientes
+ */
 
-import { verificarToken } from '../../middlewares/auth.middleware.js';
+/**
+ * @swagger
+ * /api/v1/turnos-medico/mis-turnos:
+ *   get:
+ *     summary: Obtener el listado de turnos asignados al médico logueado
+ *     tags:
+ *       - Turnos Médico
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Agenda de turnos obtenida exitosamente
+ */
 
-import {authorize} from '../../middlewares/role.middleware.js';
+/**
+ * @swagger
+ * /api/v1/turnos-medico/{id}/atender:
+ *   patch:
+ *     summary: Marcar un turno específico como Atendido
+ *     tags:
+ *       - Turnos Médico
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Estado del turno modificado con éxito a atendido
+ */
 
-const router = express.Router();
+import {
+  misTurnos,
+  atenderTurno,
+} from "../../controllers/turnosMedico.controller.js";
+import { verificarToken } from "../../middlewares/auth.middleware.js";
+import { authorize } from "../../middlewares/role.middleware.js";
 
-// Obtener turnos propios
-router.get(
-  '/mis-turnos',
-  verificarToken,
-  authorize(1),
-  misTurnos
-);
+const router = Router();
 
-// Marcar turno como atendido
-router.patch(
-  '/:id/atender',
-  verificarToken,
-  authorize(1),
-  atenderTurno
-);
+router.get("/mis-turnos", verificarToken, authorize(1), misTurnos);
+
+router.patch("/:id/atender", verificarToken, authorize(1), atenderTurno);
 
 export default router;

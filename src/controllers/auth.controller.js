@@ -1,44 +1,64 @@
-import * as authService from '../services/auth.service.js';
+import { login, register } from '../services/auth.service.js';
 
 const loginController = async (req, res) => {
-
   try {
-
     const { email, password } = req.body;
+    const resultado = await login(email, password);
 
-    const resultado = await authService.login(email, password);
-
-    res.json({
+    return res.status(200).json({
       ok: true,
-      data: resultado
+      message: 'Login correcto',
+      data: {
+        usuario: resultado.usuario,
+        token: resultado.token
+      }
     });
 
   } catch (error) {
-
-    res.status(401).json({
+    if (error.message === 'Credenciales inválidas') {
+      return res.status(401).json({ ok: false, error: error.message });
+    }
+    return res.status(500).json({
       ok: false,
       error: error.message
     });
-
   }
-
 };
+
 
 const registerController = async (req, res) => {
   try {
-    const data = await authService.register(req.body);
+    // Si el usuario subió una foto, construimos la ruta para guardarla en la base de datos, si no, dejamos el campo vacío
+    const fotoPath = req.file ? `/uploads/${req.file.filename}` : '';
 
-    res.json({ ok: true, data });
+    const { documento, nombres, apellido, email, password } = req.body;
+
+    // Mandamos al servicio todos los datos del formulario de texto sumando la ruta de la foto_path
+    const usuario = await register({ 
+      documento, 
+      nombres, 
+      apellido, 
+      email, 
+      password,
+      foto_path: fotoPath 
+    });
+
+    return res.status(201).json({
+      ok: true,
+      message: 'Usuario registrado correctamente',
+      data: usuario
+    });
 
   } catch (error) {
-    res.status(400).json({
+    if (error.message === 'El documento ya está registrado' ||
+        error.message === 'El email ya está registrado') {
+      return res.status(409).json({ ok: false, error: error.message });
+    }
+    return res.status(500).json({
       ok: false,
       error: error.message
     });
   }
 };
 
-export {
-  loginController,
-  registerController
-};
+export { loginController, registerController }; 
