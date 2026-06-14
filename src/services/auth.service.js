@@ -32,7 +32,6 @@ const login = async (email, password) => {const usuario = await findByEmail(emai
   //   }
   // );
 
-  console.log('USUARIO EN LOGIN:', usuario);
 
 const token = jwt.sign(
   {
