@@ -4,9 +4,11 @@ import path from 'path';
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
 // guardado de archivos en la carpeta 'uploads'.
+
     cb(null, 'uploads/'); 
   },
   filename: (req, file, cb) => {
+
 // Para  las imágenes que  tienen el mismo nombre, inventamos un código único usando la fecha actual y un número al azar
     const sufijoUnico = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const extension = path.extname(file.originalname);
@@ -16,6 +18,7 @@ const storage = multer.diskStorage({
 });
 
 // validacion para subir archivos son en los formatos validos idnicados en el filtro de seguridad, para evitar que se suban archivos no deseados como PDF o ejecutables
+
 const filtroArchivos = (req, file, cb) => {
 // Definimos qué formatos vamos a aceptar
   const tiposPermitidos = /jpeg|jpg|png/;

@@ -59,8 +59,19 @@ const marcarTurnoAtendido = async (
   return result;
 };
 
+
+const findMedicoByUsuarioId = async (id_usuario) => {
+  const [rows] = await pool.query(
+    'SELECT id_medico FROM medicos WHERE id_usuario = ?',
+    [id_usuario]
+  );
+  return rows[0] || null;
+};
+
+
 export {
   obtenerTurnosPorMedico,
   buscarTurnoPorId,
-  marcarTurnoAtendido
+  marcarTurnoAtendido,
+  findMedicoByUsuarioId
 };

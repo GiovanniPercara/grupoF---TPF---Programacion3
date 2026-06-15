@@ -45,7 +45,7 @@ const crearTurno = async ({
     id_obra_social,
     fecha_hora,
     valor_total,
-    atentido: 0
+    atendido: 0
   };
 };
 
@@ -66,7 +66,48 @@ const listarTurnosPaciente = async (
     );
 };
 
+const editarTurno = async (
+  id_turno_reserva,
+  {
+    id_medico,
+    id_obra_social,
+    fecha_hora
+  }
+) => {
+
+  const turnoExiste = await turnoRepository
+    .findTurnoByMedicoAndFecha(
+      id_medico,
+      fecha_hora
+    );
+
+  if (turnoExiste) {
+    throw new Error(
+      'El médico ya tiene un turno en ese horario'
+    );
+  }
+
+  const actualizado =
+    await turnoRepository.updateTurno(
+      id_turno_reserva,
+      {
+        id_medico,
+        id_obra_social,
+        fecha_hora
+      }
+    );
+
+  if (!actualizado) {
+    throw new Error(
+      'Turno no encontrado'
+    );
+  }
+
+  return actualizado;
+};
+
 export {
   crearTurno,
-  listarTurnosPaciente
+  listarTurnosPaciente,
+  editarTurno
 };

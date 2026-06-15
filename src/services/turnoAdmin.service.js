@@ -39,7 +39,7 @@ const registrarTurnoAdmin = async ({ id_medico, id_paciente, id_obra_social, fec
     id_obra_social,
     fecha_hora,
     valor_total,
-    atentido: 0
+    atendido: 0
   };
 };
 

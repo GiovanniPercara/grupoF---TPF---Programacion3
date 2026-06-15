@@ -9,7 +9,7 @@ const generarReportePaciente = async (idPaciente, res) => {
             tr.id_turno_reserva,
             tr.fecha_hora,
             tr.valor_total,
-            tr.atentido,
+            tr.atendido,
 
             up.nombres AS paciente_nombre,
             up.apellido AS paciente_apellido,
@@ -114,7 +114,7 @@ const generarReportePaciente = async (idPaciente, res) => {
 
     doc.text(`   Valor: $${Number(turno.valor_total).toFixed(2)}`);
 
-    doc.text(`   Atendido: ${turno.atentido ? "Si" : "N"}`);
+    doc.text(`   Atendido: ${turno.atendido ? "Si" : "NO"}`);
 
     doc.moveDown();
   });
