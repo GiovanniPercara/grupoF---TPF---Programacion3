@@ -18,7 +18,7 @@ const registrarTurnoAdmin = async ({ id_medico, id_paciente, id_obra_social, fec
   if (obraSocial.es_particular === 1) {
     valor_total = medico.valor_consulta;
   } else {
-    valor_total = valor_consulta - (porcentaje_descuento / 100 * valor_consulta);
+    valor_total = valor_consulta - (porcentaje_descuento * valor_consulta);
   }
 
   const id_turno_reserva = await turnoAdminRepo.createTurnoAdmin({
