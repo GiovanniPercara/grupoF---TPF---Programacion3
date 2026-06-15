@@ -5,25 +5,26 @@ export const listarTodo = async () => {
 };
 
 export const buscarPorId = async (id) => {
-  return await pacienteRepo.findById(id);
+  const paciente = await pacienteRepo.findById(id);
+  if (!paciente) throw new Error('Paciente no encontrado');
+  return paciente;
 };
 
 export const agregar = async (datos) => {
-  // Lógica: No permitir crear un paciente si el usuario ya tiene perfil
-  const existe = await pacienteRepo.findByUsuarioId(datos.id_usuario);
-  if (existe) throw new Error('El usuario ya tiene un perfil de paciente');
-  
-  return await pacienteRepo.save(datos);
+  const id = await pacienteRepo.save(datos);
+  return id;
 };
 
 export const editar = async (id, datos) => {
-  const exito = await pacienteRepo.update(id, datos);
-  if (!exito) throw new Error('No se pudo actualizar o el paciente no existe');
-  return exito;
+  const existe = await pacienteRepo.findById(id);
+  if (!existe) throw new Error('Paciente no encontrado');
+
+  return await pacienteRepo.update(id, datos);
 };
 
 export const eliminarLogico = async (id) => {
-  const exito = await pacienteRepo.softDelete(id);
-  if (!exito) throw new Error('Paciente no encontrado para eliminar');
-  return exito;
+  const existe = await pacienteRepo.findById(id);
+  if (!existe) throw new Error('Paciente no encontrado');
+
+  return await pacienteRepo.softDelete(id);
 };

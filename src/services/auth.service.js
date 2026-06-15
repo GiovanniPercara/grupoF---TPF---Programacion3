@@ -19,18 +19,32 @@ const login = async (email, password) => {const usuario = await findByEmail(emai
     throw new Error('Credenciales inválidas');
   }
 
-  const token = jwt.sign(
-    {
-      id_usuario: usuario.id_usuario,
-      rol: usuario.rol
-    },
+  // const token = jwt.sign(
+  //   {
+  //     id_usuario: usuario.id_usuario,
+  //     rol: usuario.rol
+  //   },
 
-    process.env.JWT_SECRET,
+  //   process.env.JWT_SECRET,
 
-    {
-      expiresIn: '8h'
-    }
-  );
+  //   {
+  //     expiresIn: '8h'
+  //   }
+  // );
+
+
+const token = jwt.sign(
+  {
+    id_usuario: usuario.id_usuario,
+    rol: usuario.rol
+  },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: '8h'
+  }
+);
+
+console.log('TOKEN GENERADO:', token);
 
   const { contrasenia, ...usuarioSeguro } = usuario;
 

@@ -53,17 +53,16 @@ const update = async (id, datos) => {
   return result.affectedRows > 0;
 };
 
-// DELETE LOGICO
+/// DELETE LOGICO -  primero buscamos el paciente para obtener su id_usuario, y luego desactivarlo
 const softDelete = async (id) => {
   const sql = `
-    UPDATE usuarios u
-    JOIN pacientes p ON u.id_usuario = p.id_usuario
-    SET u.activo = 0
-    WHERE p.id_paciente = ?
+    UPDATE usuarios
+    SET activo = 0
+    WHERE id_usuario = (
+      SELECT id_usuario FROM pacientes WHERE id_paciente = ?
+    )
   `;
-
   const [result] = await pool.query(sql, [id]);
-
   return result.affectedRows > 0;
 };
 

@@ -17,12 +17,14 @@ const registerValidator = [
     .notEmpty().withMessage('El apellido es obligatorio')
     .isAlpha('es-ES').withMessage('El apellido solo debe contener letras')
     .trim(),
-    
+
+
     check('email')
-    .isEmail()
-    .withMessage('Email inválido')
-    .normalizeEmail()
-    .bail(),
+    .notEmpty().withMessage('El email es obligatorio')
+    .bail()
+    .isEmail().withMessage('Email inválido')
+    .normalizeEmail(),
+    
     
     check('password')
     .isLength({ min: 6 })
@@ -32,13 +34,15 @@ const registerValidator = [
 ];
 
 const loginValidator = [
+
   check('email')
-    .notEmpty().withMessage('El email es obligatorio')
-    .isEmail().withMessage('Email inválido')
-    .normalizeEmail(),
+  .notEmpty().withMessage('El email es obligatorio')
+  .bail()
+  .isEmail().withMessage('Email inválido')
+  .normalizeEmail(),
 
   check('password')
-    .notEmpty().withMessage('La contraseña es obligatoria')
+  .notEmpty().withMessage('La contraseña es obligatoria')
 ];
 
 export {
