@@ -14,11 +14,14 @@ const registrarTurnoAdmin = async ({ id_medico, id_paciente, id_obra_social, fec
   const turnoExiste = await turnoAdminRepo.findTurnoExistente(id_medico, fecha_hora);
   if (turnoExiste) throw new Error('El médico ya tiene un turno en ese horario');
 
+  const valorConsulta = Number(medico.valor_consulta);
+  const porcentajeDescuento = Number(obraSocial.porcentaje_descuento);
+
   let valor_total;
   if (obraSocial.es_particular === 1) {
-    valor_total = medico.valor_consulta;
+    valor_total = valorConsulta;
   } else {
-    valor_total = valor_consulta - (porcentaje_descuento / 100 * valor_consulta);
+    valor_total = valorConsulta - ((porcentajeDescuento / 100) * valorConsulta);
   }
 
   const id_turno_reserva = await turnoAdminRepo.createTurnoAdmin({
