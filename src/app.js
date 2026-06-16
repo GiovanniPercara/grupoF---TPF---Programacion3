@@ -14,6 +14,7 @@ import turnoAdminRoutes from './routes/v1/turnoAdmin.routes.js';
 import estadisticasRoutes from './routes/v1/estadisticas.routes.js';
 import turnosMedicoRoutes from './routes/v1/turnosMedico.routes.js';
 import reporteRoutes from './routes/v1/reporte.routes.js';
+import medicoRoutes from './routes/v1/medico.routes.js';
 
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './swagger.js';
@@ -23,26 +24,18 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
-// Le decimos a Express que la carpeta 'uploads' de la raíz sea estática y pública
 app.use('/uploads', express.static('uploads'));
 
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec)
-);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Ruta principal
 app.get('/', (req, res) => {
   res.send('Servidor funcionando 🚀');
 });
 
-// Rutas
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/turnos', turnoRoutes);
 app.use('/api/v1/pacientes', pacienteRoutes);
@@ -54,6 +47,7 @@ app.use('/api/v1/pacientes-obras-sociales', pacienteObraSocialRoutes);
 app.use('/api/v1/admin/turnos', turnoAdminRoutes);
 app.use('/api/v1/estadisticas', estadisticasRoutes);
 app.use('/api/v1/reportes', reporteRoutes);
+app.use('/api/v1/medicos', medicoRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`);

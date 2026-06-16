@@ -2,14 +2,15 @@ import * as medicoService from '../services/medico.service.js';
 
 export const getAll = async (req, res) => {
   try {
-    const { especialidad } = req.query;
+    const { id_especialidad } = req.query;
 
-    const medicos = especialidad
-      ? await medicoService.listarPorEspecialidad(especialidad)
+    const medicos = id_especialidad
+      ? await medicoService.listarPorEspecialidad(id_especialidad)
       : await medicoService.listarTodo();
 
     return res.status(200).json({
       ok: true,
+      cantidad: medicos.length,
       data: medicos
     });
   } catch (error) {
