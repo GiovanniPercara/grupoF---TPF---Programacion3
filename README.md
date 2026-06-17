@@ -1,26 +1,27 @@
 
 GRUPO F ---TPF---Programacion3
 
-Pre-entrega de Trabajo Integrador — Programación III (Grupo F)
+Entrega de Trabajo Integrador — Programación III (Grupo F)
 
 🧾 Descripción
 
-Desarrollo de un BREAD de pacientes para un sistema de gestión de turnos clínicos.
-La API permite gestionar pacientes mediante operaciones de crear, leer, actualizar y eliminar (soft delete).
-
 Proyecto desarrollado con Node.js, Express y MySQL, aplicando arquitectura en capas.
  
- 🏗️ Arquitectura
+ 🏗️ El proyecto sigue una Arquitectura en Capas para garantizar la separación de responsabilidades, la mantenibilidad y la escalabilidad del código.
 
-El proyecto utiliza una Arquitectura en Capas:
+Routes: Define los puntos de entrada (endpoints) y vincula las rutas con los controladores correspondientes.
 
-Routes: Definición de los puntos de entrada.
+Controllers: Gestiona la lógica de las peticiones HTTP (recepción de parámetros, validación inicial y envío de respuestas).
 
-Controllers: Manejo de la lógica de las peticiones.
+Services: Contiene la lógica de negocio principal y orquestación de procesos. Es el núcleo donde se decide el comportamiento del sistema.
 
-Services: Lógica de negocio principal.
+Repositories: Encargados de la persistencia de datos mediante la interacción directa con MySQL utilizando Sequelize.
 
-Repositories: Interacción directa con la base de datos (MySQL).
+Middlewares: Capa transversal encargada de la autenticación (JWT), autorización y manejo centralizado de errores.
+
+DTOs / Validations: Capa de transferencia de datos y validación de esquemas (usando express-validator) para asegurar que solo lleguen datos correctos a los servicios.
+
+Models: Definición de la estructura de las tablas en la base de datos (ORM Sequelize).
 
 👥 Integrantes
 
@@ -60,12 +61,16 @@ Testing: Bruno
 │   ├── config/       
 │   ├── controllers/  
 │   ├── middlewares/  
-│   ├── repositories/ 
+│   ├── repositories/
+    ├── repositorie/
  
 │   ├── routes/      
 │   ├── services/     
 │   └── app.js        
 └── package.json      
+
+
+├─upload/
 
 🧪 Pruebas con Bruno
 
