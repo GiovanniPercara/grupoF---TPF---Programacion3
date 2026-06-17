@@ -72,60 +72,6 @@ Testing: Bruno
 
 ├─upload/
 
-🧪 Pruebas con Bruno
-
-🔗 Base URL
-http://localhost:3000/api/pacientes
-
-📌 Endpoints disponibles
-
-🔹 Obtener todos los pacientes
-GET /api/pacientes
-
-🔹 Obtener paciente por ID
-GET /api/pacientes/:id
-
-Ejemplo:
-http://localhost:3000/api/pacientes/1
-
-
-➕ Crear paciente
-
-POST /api/pacientes
-
-Body (JSON):
-
-{
-  "id_usuario": 5,
-  "id_obra_social": 1
-}
-
-✏️ Actualizar paciente
-
-PUT /api/pacientes/:id
-
-Body:
-{
-  "id_obra_social": 2
-}
-
-🗑️ Eliminar paciente (Soft Delete)
-
-DELETE /api/pacientes/:id
-
-🔄 Flujo recomendado de prueba
-
-GET → verificar datos existentes
-
-POST → crear paciente
-
-GET por ID → validar creación
-
-PUT → actualizar datos
-
-DELETE → desactivar paciente
-
-GET → verificar cambios
 
 🚀 Ejecución del proyecto
 
