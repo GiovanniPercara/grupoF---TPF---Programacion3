@@ -1,17 +1,18 @@
-import pool from '../config/db.js';
+import pool from "../config/db.js";
 
 export const obtenerTurnosPaciente = async (idPaciente) => {
+  const [rows] = await pool.query(
+    `
+    SELECT
+      tr.id_turno_reserva,
+      tr.fecha_hora,
+      tr.valor_total,
+      tr.atentido AS atendido
+    FROM turnos_reservas tr
+    WHERE tr.id_paciente = ?;
+    `,
+    [idPaciente],
+  );
 
-    const [rows] = await pool.query(
-        `
-        SELECT *
-        FROM turnos_reservas
-        WHERE id_paciente = ?
-        AND activo = 1
-        ORDER BY fecha_hora
-        `,
-        [idPaciente]
-    );
-
-    return rows;
+  return rows;
 };
