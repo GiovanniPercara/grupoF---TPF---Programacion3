@@ -156,6 +156,8 @@ import {
   listarObrasSocialesController,
   crearObraSocialController,
   editarObraSocialController,
+  asociarMedicoObraSocialController,
+  asociarPacienteObraSocialController,
   listarEspecialidadesController,
   crearEspecialidadController,
   editarEspecialidadController
@@ -166,6 +168,8 @@ import { soloAdmin } from '../../middlewares/admin.middleware.js';
 
 import {
   obraSocialValidator,
+  asociarMedicoObraSocialValidator,
+  asociarPacienteObraSocialValidator,
   especialidadValidator
 } from '../../middlewares/admin.validator.js';
 
@@ -180,6 +184,8 @@ router.use(soloAdmin);
 router.get('/obras-sociales', listarObrasSocialesController);
 router.post('/obras-sociales', obraSocialValidator, validate, crearObraSocialController);
 router.put('/obras-sociales/:id', obraSocialValidator, validate, editarObraSocialController);
+router.post('/obras-sociales/:id/medicos', asociarMedicoObraSocialValidator, validate, asociarMedicoObraSocialController);
+router.post('/obras-sociales/:id/pacientes', asociarPacienteObraSocialValidator, validate, asociarPacienteObraSocialController);
 
 // ESPECIALIDADES
 router.get('/especialidades', listarEspecialidadesController);

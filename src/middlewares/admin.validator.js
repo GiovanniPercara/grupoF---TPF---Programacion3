@@ -30,6 +30,28 @@ const obraSocialValidator = [
 
 ];
 
+const asociarMedicoObraSocialValidator = [
+
+  check('id_medico')
+    .notEmpty().withMessage('El médico es obligatorio')
+    .isNumeric().withMessage('El médico debe ser un número'),
+
+  check('id_obra_social')
+    .notEmpty().withMessage('La obra social es obligatoria')
+    .isNumeric().withMessage('La obra social debe ser un número')
+];
+
+const asociarPacienteObraSocialValidator = [
+
+  check('id_paciente')
+    .notEmpty().withMessage('El paciente es obligatorio')
+    .isNumeric().withMessage('El paciente debe ser un número'),
+
+  check('id_obra_social')
+    .notEmpty().withMessage('La obra social es obligatoria')
+    .isNumeric().withMessage('La obra social debe ser un número')
+];
+
 const especialidadValidator = [
 
   check('nombre')
@@ -49,5 +71,7 @@ const especialidadValidator = [
 
 export {
   obraSocialValidator,
+  asociarMedicoObraSocialValidator,
+  asociarPacienteObraSocialValidator,
   especialidadValidator
 };

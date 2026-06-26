@@ -86,6 +86,67 @@ const editarObraSocialController = async (req, res) => {
 
   }
 };
+
+
+const asociarMedicoObraSocialController = async (req,res)=>{
+try {
+    const {id}=req.params;
+    const{id_medico}=req.body;
+
+    const resultado = await adminService.asociarMedicoObraSocial(id_medico,id);
+
+    return res.status(201).json({
+      ok: true,
+      message: 'Médico asociado a la obra social correctamente',
+      data: resultado
+    });
+
+  } catch (error) {
+
+    if (
+      error.message === 'Médico no encontrado' ||
+      error.message === 'Obra social no encontrada'
+    ) {
+      return res.status(404).json({ ok: false, error: error.message });
+    }
+
+    if (error.message === 'El médico ya está asociado a esa obra social') {
+      return res.status(409).json({ ok: false, error: error.message });
+    
+    }
+
+    return res.status(500).json({ ok: false, error: 'Error interno del servidor' });
+  }
+
+}
+
+
+const asociarPacienteObraSocialController = async (req, res) => {
+  try {
+    const {id}=req.params;
+    const{id_medico}=req.body;
+
+    const resultado = await adminService.asociarPacienteObraSocial(id_paciente,id);
+
+    return res.status(200).json({
+      ok: true,
+      message: 'Paciente asociado a la obra social correctamente',
+      data: resultado
+    });
+
+  } catch (error) {
+
+    if (
+      error.message === 'Paciente no encontrado' ||
+      error.message === 'Obra social no encontrada'
+    ) {
+      return res.status(404).json({ ok: false, error: error.message });
+    }
+
+    return res.status(500).json({ ok: false, error: 'Error interno del servidor' });
+  }
+};
+
 //ESPECIALIDADES
 const listarEspecialidadesController = async (
   req,
@@ -189,6 +250,8 @@ export {
   listarObrasSocialesController,
   crearObraSocialController,
   editarObraSocialController,
+  asociarMedicoObraSocialController,
+  asociarPacienteObraSocialController,
   listarEspecialidadesController,
   crearEspecialidadController,
   editarEspecialidadController
