@@ -1,29 +1,49 @@
+🏥 GRUPO F — TPF Programación III
+📌 Descripción del proyecto
 
-GRUPO F ---TPF---Programacion3
+API REST desarrollada con Node.js, Express y MySQL, siguiendo una arquitectura en capas (Layered Architecture) para garantizar escalabilidad, mantenibilidad y separación de responsabilidades.
 
-Entrega de Trabajo Integrador — Programación III (Grupo F)
+El sistema permite la gestión de una clínica médica, incluyendo usuarios, pacientes, médicos, turnos, especialidades, obras sociales, estadísticas y reportes.
 
-🧾 Descripción
+🏗️ Arquitectura del proyecto
 
-Proyecto desarrollado con Node.js, Express y MySQL, aplicando arquitectura en capas.
- 
- 🏗️ El proyecto sigue una Arquitectura en Capas para garantizar la separación de responsabilidades, la mantenibilidad y la escalabilidad del código.
+El proyecto está organizado en capas:
 
-Routes: Define los puntos de entrada (endpoints) y vincula las rutas con los controladores correspondientes.
+🔹 Routes
 
-Controllers: Gestiona la lógica de las peticiones HTTP (recepción de parámetros, validación inicial y envío de respuestas).
+Define los endpoints de la API y conecta las rutas con los controladores.
 
-Services: Contiene la lógica de negocio principal y orquestación de procesos. Es el núcleo donde se decide el comportamiento del sistema.
+🔹 Controllers
 
-Repositories: Encargados de la persistencia de datos mediante la interacción directa con MySQL utilizando Sequelize.
+Gestionan las solicitudes HTTP, validan parámetros básicos y devuelven respuestas.
 
-Middlewares: Capa transversal encargada de la autenticación (JWT), autorización y manejo centralizado de errores.
+🔹 Services
 
-DTOs / Validations: Capa de transferencia de datos y validación de esquemas (usando express-validator) para asegurar que solo lleguen datos correctos a los servicios.
+Contienen la lógica de negocio principal del sistema.
 
-Models: Definición de la estructura de las tablas en la base de datos (ORM Sequelize).
+🔹 Repositories
 
-👥 Integrantes
+Encargados del acceso a la base de datos MySQL.
+
+🔹 Middlewares
+
+Incluyen:
+
+Autenticación con JWT
+Autorización por roles
+Validaciones de datos
+Manejo de errores
+Upload de archivos (Multer)
+
+🔹 Validaciones
+
+Uso de express-validator para asegurar integridad de datos.
+
+🔹 Config
+
+Configuración de base de datos y entorno.
+
+🧑‍💻 Integrantes
 
 Lucía Allassia
 Martina Ascona
@@ -31,62 +51,77 @@ Estrella Cardozo
 Giovanni Percara
 Andrea Natalia Segovia
 
-⚠️ Importante
-
-Las carpetas node_modules y el archivo .env no se encuentran incluidos en el repositorio.
-
-Antes de ejecutar el proyecto es necesario:
-
-instalar nuevamente las dependencias
-crear y configurar el archivo .env
-Esto se realizó por seguridad y buenas prácticas de desarrollo.
-
-🛠️ Tecnologías
-
-Runtime: Node.js
-
-Framework: Express
-
-Base de Datos: MySQL
-
-Herramientas de Desarrollo: dotenv, cors, morgan, nodemon.
-
-Testing: Bruno
+🛠️ Tecnologías utilizadas
+Node.js
+Express
+MySQL
+Sequelize
+JWT (JSON Web Token)
+Multer
+dotenv
+cors
+morgan
+nodemon
+express-validator
+Swagger (documentación API)
+Bruno (testing de endpoints)
 
 📁 Estructura del proyecto
+src/
+│
+├── config/
+├── controllers/
+├── middlewares/
+├── repositories/
+├── routes/v1/
+├── services/
+├── uploads/
+└── app.js
 
+🚀 Instalación y ejecución
 
-├─src/
-
-│   ├── config/       
-│   ├── controllers/  
-│   ├── middlewares/  
-│   ├── repositories/
-    ├── repositorie/
- 
-│   ├── routes/      
-│   ├── services/     
-│   └── app.js        
-└── package.json      
-
-
-├─upload/
-
-
-🚀 Ejecución del proyecto
-
+1️⃣ Instalar dependencias
 npm install
+
+2️⃣ Crear archivo .env
+
+Configurar variables de entorno:
+
+DB_HOST=
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+JWT_SECRET=
+PORT=3000
+
+3️⃣ Ejecutar el proyecto
 
 npm run dev
 
-Servidor disponible en:
+Servidor:
 
 http://localhost:3000
 
-📌 Notas Finales
+📌 Documentación API
 
-Validaciones: Se utiliza express-validator para asegurar que los IDs sean numéricos y obligatorios.
+La API cuenta con documentación generada con Swagger:
 
-Integridad: Los pacientes dependen de un usuario previo en la base de datos.
+http://localhost:3000/api-docs
 
-Vistas: La obtención de datos detallados se realiza mediante Views SQL para optimizar el rendimiento de las consultas
+⚠️ Notas importantes
+❌ No se incluye node_modules
+❌ No se incluye .env
+✔️ Debe ejecutarse npm install antes de iniciar
+✔️ La base de datos MySQL debe estar configurada previamente
+
+🧠 Buenas prácticas aplicadas
+Arquitectura en capas
+Separación de responsabilidades
+Validación de datos con express-validator
+Seguridad con JWT
+Uso de variables de entorno
+Organización modular del backend
+
+📎 Observaciones finales
+
+El sistema implementa una API REST completa con control de autenticación, manejo de roles y documentación interactiva mediante Swagger.
