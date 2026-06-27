@@ -74,28 +74,59 @@ Configuración de base de datos y entorno.
 
 ## 📁 Estructura del proyecto
 
-src/
-│
-├── config/
-│
-├── controllers/
-│
-├── middlewares/
-│
-├── repositories/
-│
-├── routes/
-│   └── v1/
-│
-├── services/
-│
-├── uploads/
-│
-└── app.js
-````
+```txt
+.
+├── package.json
+├── package-lock.json
+├── README.md
+├── src
+│   ├── app.js
+│   ├── config
+│   │   └── db.js
+│   ├── controllers
+│   │   ├── admin.controllers.js
+│   │   ├── auth.controller.js
+│   │   ├── especialidades.controller.js
+│   │   ├── estadisticas.controller.js
+│   │   ├── medico.controller.js
+│   │   ├── medicoEspecialidad.controller.js
+│   │   ├── paciente.controller.js
+│   │   ├── reporte.controller.js
+│   │   ├── turnoAdmin.controller.js
+│   │   ├── turno.controller.js
+│   │   └── turnosMedico.controller.js
+│   ├── middlewares
+│   │   ├── admin.middleware.js
+│   │   ├── auth.middleware.js
+│   │   ├── role.middleware.js
+│   │   ├── multerUpload.middleware.js
+│   │   ├── validate.js
+│   │   └── validators...
+│   ├── repositories
+│   │   ├── admin.repository.js
+│   │   ├── auth.repository.js
+│   │   ├── medico.repository.js
+│   │   ├── paciente.repository.js
+│   │   └── ...
+│   ├── routes
+│   │   └── v1
+│   │       ├── admin.routes.js
+│   │       ├── auth.routes.js
+│   │       ├── medico.routes.js
+│   │       ├── paciente.routes.js
+│   │       └── ...
+│   ├── services
+│   │   ├── admin.service.js
+│   │   ├── auth.service.js
+│   │   ├── medico.service.js
+│   │   ├── paciente.service.js
+│   │   └── ...
+│   ├── swagger.js
+│   └── app.js
+└── uploads
+    └── ( IMAGEN/Foto perfil paciente)
 
----
-
+``` 
 ## 🚀 Instalación y ejecución
 
 ### 1️⃣ Instalar dependencias
