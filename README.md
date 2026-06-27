@@ -1,6 +1,4 @@
-Te lo dejo listo para copiar y pegar, con formato prolijo tipo “README de entrega perfecta” y con estructura bien alineada 👇
 
-````md
 # 🏥 GRUPO F — TPF Programación III
 
 ---
