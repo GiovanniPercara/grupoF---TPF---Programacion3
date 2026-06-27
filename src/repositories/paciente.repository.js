@@ -53,7 +53,7 @@ const update = async (id, datos) => {
   return result.affectedRows > 0;
 };
 
-/// DELETE LOGICO -  primero buscamos el paciente para obtener su id_usuario, y luego desactivarlo
+// DELETE LÓGICO
 const softDelete = async (id) => {
   const sql = `
     UPDATE usuarios
@@ -62,15 +62,30 @@ const softDelete = async (id) => {
       SELECT id_usuario FROM pacientes WHERE id_paciente = ?
     )
   `;
+
   const [result] = await pool.query(sql, [id]);
   return result.affectedRows > 0;
 };
 
+// ASOCIAR / ACTUALIZAR OBRA SOCIAL
+const assignObraSocial = async (id_paciente, id_obra_social) => {
+  const [result] = await pool.query(
+    `UPDATE pacientes
+     SET id_obra_social = ?
+     WHERE id_paciente = ?`,
+    [id_obra_social, id_paciente]
+  );
+
+  return result.affectedRows > 0;
+};
+
+// EXPORT
 export {
   findAll,
   findById,
   findByUsuarioId,
   save,
   update,
-  softDelete
+  softDelete,
+  assignObraSocial
 };

@@ -34,7 +34,7 @@
  */
 
 import express from 'express';
-
+// verificar que noe xiste medicoobrasoscial.controllers.js y medicoobrasocial.validator.js
 import { asociarMedicoObraSocialController } from '../../controllers/medicoObraSocial.controllers.js';
 import { asociarMedicoObraSocialValidator } from '../../middlewares/medicoObraSocial.validator.js';
 import { verificarToken } from '../../middlewares/auth.middleware.js';

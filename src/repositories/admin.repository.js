@@ -90,12 +90,12 @@ const findPacienteById = async (id_paciente) => {
 };
 
 //const findObraSocialById = async (id_obra_social) => {
-  const [rows] = await pool.query(
-    `SELECT id_obra_social FROM obras_sociales WHERE id_obra_social = ? AND activo = 1`,
-    [id_obra_social]
-  );
-  return rows[0] || null;
-//}; 
+//   const [rows] = await pool.query(
+//     `SELECT id_obra_social FROM obras_sociales WHERE id_obra_social = ? AND activo = 1`,
+//     [id_obra_social]
+//   );
+//  return rows[0] || null;
+// //}; 
 
 
 const actualizarObraSocial = async (id_paciente, id_obra_social) => {
@@ -147,7 +147,6 @@ export {
   findAsociacion,
   asociar,
   findPacienteById,
-  findObraSocialById,
   actualizarObraSocial,
   findAllEspecialidades,
   createEspecialidad,

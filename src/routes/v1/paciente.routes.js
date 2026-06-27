@@ -82,6 +82,37 @@
  *         description: Paciente eliminado
  */
 
+/**
+ * @swagger
+ * /api/v1/pacientes/{id}/obras-sociales:
+ *   put:
+ *     summary: Asignar o actualizar obra social de un paciente
+ *     tags:
+ *       - Pacientes
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_obra_social
+ *             properties:
+ *               id_obra_social:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Obra social asignada correctamente
+ */
+
 import express from 'express';
 import * as pCtrl from '../../controllers/paciente.controller.js';
 import { pacienteValidator } from '../../middlewares/paciente.validator.js';
@@ -89,6 +120,8 @@ import { verificarToken } from '../../middlewares/auth.middleware.js';
 import validate from '../../middlewares/validate.js';
 
 const router = express.Router();
+
+//crud//
 
 router.get('/', pCtrl.getAll);
 
@@ -99,5 +132,12 @@ router.post('/', pacienteValidator, validate, pCtrl.create);
 router.put('/:id', pacienteValidator, validate, pCtrl.edit);
 
 router.delete('/:id', pCtrl.remove);
+
+// OBRA SOCIAL (lo incluimos en paciente)
+router.put(
+  '/:id/obras-sociales',
+  verificarToken,
+  pCtrl.asociarPacienteObraSocialController
+);
 
 export default router;
