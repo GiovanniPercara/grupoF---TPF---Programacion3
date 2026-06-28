@@ -23,7 +23,7 @@
 - Eliminamos `medicoEspecialidad.routes.js`, `.controller.js`, `.service.js`, `.repository.js`
 - Eliminamos `medicoObraSocial.routes.js` y `medicoEspecialidad.validator.js`
 - La asociación médico–especialidad se resuelve con `PUT /api/v1/medicos/:id` en la capa de médicos
-- La asociación médico–obra social se resuelve con `POST /api/v1/admin/obras-sociales/:id/medicos` que ya existía correctamente
+- La asociación médico–obra social se resuelve con `POST /api/v1/admin/obras-sociales/:id/medicos` que ya existía 
 - La asociación paciente–obra social se resuelve con `POST /api/v1/admin/obras-sociales/:id/pacientes`, corrigiendo el bug que leía `id_medico` del body en lugar de `id_paciente`
 
 ---
@@ -35,7 +35,7 @@
 
 **Qué hicimos:**
 - El acceso a datos quedó exclusivamente en `reporte.repository.js`
-- El service ahora solo contiene la lógica de negocio: busca los datos usando el repository y genera el PDF en memoria, devolviendo un `Buffer`
+- El service ahora solo contiene la lógica de negocio: busca los datos usando el repository y genera el PDF, devolviendo un `Buffer`
 - El controller es el único que maneja `res`: recibe el buffer del service, configura los headers y envía el PDF al cliente
 
 ---
