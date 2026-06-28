@@ -15,7 +15,7 @@
 
 ## 🔧 Correcciones aplicadas (Trabajo Final Integrador - Recuperatorio)
 
-### 1. CRUD — Rutas de asociación innecesarias
+### 1. CRUD 
 
 **Corrección indicada:** *"La ruta medicoEspecialidad no es necesaria, se puede resolver con PUT en el acceso a datos de medicos. Lo mismo con medicoObraSocial y pacienteObraSocial."*
 
@@ -28,7 +28,7 @@
 
 ---
 
-### 2. Reglas de negocio — El reporte accedía a la base de datos desde el service
+### 2. Reglas de negocio 
 
 **Corrección indicada:** *"Mal implementado la creación del reporte. Acceden a los datos desde el servicio: reporte.service.js. Falta una capa de datos."*
 
@@ -50,7 +50,7 @@
 
 ---
 
-### 4. Diseño REST — Rutas mal ubicadas
+### 4. Diseño REST 
 
 **Corrección indicada:** *"Rutas innecesarias o mal nombradas. Ejemplo: post('/especialidades') debería estar en la ruta de especialidades, no en la ruta de admin."*
 
