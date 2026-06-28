@@ -37,7 +37,7 @@ const crearTurnoController = async (req, res) => {
         error: error.message
       });
     }
-    console.error(error);
+  
 
     return res.status(500).json({
       ok: false,
@@ -122,8 +122,6 @@ const editarTurnoController = async (req,res) => {
         error: error.message
       });
     }
-
-    console.error(error);
 
     return res.status(500).json({
       ok: false,

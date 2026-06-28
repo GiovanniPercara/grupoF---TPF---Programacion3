@@ -60,10 +60,10 @@ import validate from '../../middlewares/validate.js';
 
 const router = express.Router();
 
-// POST /api/turnos — crear turno
+
 router.post('/', verificarToken, crearTurnoValidator, validate, crearTurnoController);
 
-// GET /api/turnos — listar turnos propios
+
 router.get('/', verificarToken, listarTurnosController);
 
 export default router;

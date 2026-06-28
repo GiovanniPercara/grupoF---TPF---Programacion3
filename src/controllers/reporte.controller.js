@@ -13,9 +13,7 @@ export const getReportePaciente = async (req, res) => {
     res.send(buffer);
 
   } catch (error) {
-    console.error(error);
 
-  
     const status = error.message === "El paciente no posee turnos registrados" ? 404 : 500;
 
     return res.status(status).json({

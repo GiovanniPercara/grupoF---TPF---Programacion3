@@ -29,7 +29,6 @@ export const eliminarLogico = async (id) => {
   return await pacienteRepo.softDelete(id);
 };
 
-// OBRA SOCIAL
 
 export const asignarObraSocial = async (id_paciente, id_obra_social) => {
   const existe = await pacienteRepo.findById(id_paciente);

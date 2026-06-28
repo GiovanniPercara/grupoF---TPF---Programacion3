@@ -1,6 +1,6 @@
 import pool from '../config/db.js';
 
-// LISTAR TODOS
+
 const findAll = async () => {
   const [rows] = await pool.query(
     'SELECT * FROM v_pacientes'
@@ -9,7 +9,7 @@ const findAll = async () => {
   return rows;
 };
 
-// BUSCAR POR ID PACIENTE
+
 const findById = async (id) => {
   const [rows] = await pool.query(
     'SELECT * FROM v_pacientes WHERE id_paciente = ?',
@@ -19,7 +19,7 @@ const findById = async (id) => {
   return rows[0] || null;
 };
 
-// BUSCAR POR ID USUARIO
+
 const findByUsuarioId = async (id_usuario) => {
   const [rows] = await pool.query(
     'SELECT id_paciente FROM pacientes WHERE id_usuario = ?',
@@ -29,7 +29,7 @@ const findByUsuarioId = async (id_usuario) => {
   return rows[0] || null;
 };
 
-// CREAR
+
 const save = async (datos) => {
   const { id_usuario, id_obra_social } = datos;
 
@@ -41,7 +41,7 @@ const save = async (datos) => {
   return result.insertId;
 };
 
-// EDITAR
+
 const update = async (id, datos) => {
   const { id_obra_social } = datos;
 
@@ -53,7 +53,7 @@ const update = async (id, datos) => {
   return result.affectedRows > 0;
 };
 
-// DELETE LÓGICO
+
 const softDelete = async (id) => {
   const sql = `
     UPDATE usuarios
@@ -67,7 +67,7 @@ const softDelete = async (id) => {
   return result.affectedRows > 0;
 };
 
-// ASOCIAR / ACTUALIZAR OBRA SOCIAL
+
 const assignObraSocial = async (id_paciente, id_obra_social) => {
   const [result] = await pool.query(
     `UPDATE pacientes
@@ -79,7 +79,7 @@ const assignObraSocial = async (id_paciente, id_obra_social) => {
   return result.affectedRows > 0;
 };
 
-// EXPORT
+
 export {
   findAll,
   findById,

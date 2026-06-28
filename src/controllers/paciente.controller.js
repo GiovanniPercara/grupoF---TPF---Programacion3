@@ -1,7 +1,6 @@
 import * as pService from '../services/paciente.service.js';
 import { validationResult } from 'express-validator';
 
-// GET TODOS
 export const getAll = async (req, res) => {
   try {
     const pacientes = await pService.listarTodo();
@@ -15,7 +14,7 @@ export const getAll = async (req, res) => {
   }
 };
 
-// GET POR ID
+
 export const getOne = async (req, res) => {
   try {
     const paciente = await pService.buscarPorId(req.params.id);
@@ -35,7 +34,7 @@ export const getOne = async (req, res) => {
   }
 };
 
-// POST
+
 export const create = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -60,7 +59,7 @@ export const create = async (req, res) => {
   }
 };
 
-// PUT
+
 export const edit = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -90,7 +89,7 @@ export const edit = async (req, res) => {
   }
 };
 
-// DELETE LÓGICO
+
 export const remove = async (req, res) => {
   try {
     const eliminado = await pService.eliminarLogico(req.params.id);

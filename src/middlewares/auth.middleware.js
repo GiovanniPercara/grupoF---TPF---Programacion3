@@ -9,7 +9,7 @@ const verificarToken = (req, res, next) => {
   }
 
   try {
-    // Verificar token y guardar datos en req.usuario
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.usuario = decoded; // { id_usuario, rol }
     next();
