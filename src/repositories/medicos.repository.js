@@ -15,4 +15,12 @@ const findByEspecialidad = async (id_especialidad) => {
   return rows;
 };
 
-export { findAll, findByEspecialidad };
+const actualizarEspecialidad = async (id_medico, id_especialidad) => {
+  const [result] = await pool.query(
+    `UPDATE medicos SET id_especialidad = ? WHERE id_medico = ? AND activo = 1`,
+    [id_especialidad, id_medico]
+  );
+  return result.affectedRows > 0;
+};
+
+export { findAll, findByEspecialidad, actualizarEspecialidad };

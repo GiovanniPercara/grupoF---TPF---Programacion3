@@ -1,15 +1,24 @@
 import * as reporteService from "../services/reporte.service.js";
 
+
 export const getReportePaciente = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await reporteService.generarReportePaciente(id, res);
+
+    const { buffer, nombreArchivo } = await reporteService.generarReportePaciente(id);
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename=${nombreArchivo}`);
+    res.send(buffer);
 
   } catch (error) {
     console.error(error);
 
-    return res.status(500).json({
+  
+    const status = error.message === "El paciente no posee turnos registrados" ? 404 : 500;
+
+    return res.status(status).json({
       ok: false,
       error: error.message,
     });

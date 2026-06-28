@@ -1,102 +1,39 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
+import { findByEmail, findByDocumento, createUsuario } from '../repositories/auth.repository.js';
 
+const login = async (email, password) => {
+  const usuario = await findByEmail(email);
 
-import {findByEmail,findByDocumento,createUsuario} from '../repositories/auth.repository.js';
+  if (!usuario) throw new Error('Credenciales inválidas');
 
-const login = async (email, password) => {const usuario = await findByEmail(email);
+  const hash = crypto.createHash('sha256').update(password.trim()).digest('hex');
 
-  if (!usuario) {
-    throw new Error('Credenciales inválidas');
-  }
+  if (hash !== usuario.contrasenia) throw new Error('Credenciales inválidas');
 
-  const hash = crypto
-    .createHash('sha256')
-    .update(password.trim())
-    .digest('hex');
-
-  if (hash !== usuario.contrasenia) {
-    throw new Error('Credenciales inválidas');
-  }
-
-  // const token = jwt.sign(
-  //   {
-  //     id_usuario: usuario.id_usuario,
-  //     rol: usuario.rol
-  //   },
-
-  //   process.env.JWT_SECRET,
-
-  //   {
-  //     expiresIn: '8h'
-  //   }
-  // );
-
-
-const token = jwt.sign(
-  {
-    id_usuario: usuario.id_usuario,
-    rol: usuario.rol
-  },
-  process.env.JWT_SECRET,
-  {
-    expiresIn: '8h'
-  }
-);
-
-console.log('TOKEN GENERADO:', token);
+  const token = jwt.sign(
+    { id_usuario: usuario.id_usuario, rol: usuario.rol },
+    process.env.JWT_SECRET,
+    { expiresIn: '8h' }
+  );
 
   const { contrasenia, ...usuarioSeguro } = usuario;
 
-  return {
-    usuario: usuarioSeguro,
-    token
-  };
+  return { usuario: usuarioSeguro, token };
 };
 
-const register = async ({
-  documento,
-  nombres,
-  apellido,
-  email,
-  password
-}) => {
-
+const register = async ({ documento, nombres, apellido, email, password, foto_path }) => {
   const docExiste = await findByDocumento(documento);
-
-  if (docExiste) {
-    throw new Error('El documento ya está registrado');
-  }
+  if (docExiste) throw new Error('El documento ya está registrado');
 
   const emailExiste = await findByEmail(email);
+  if (emailExiste) throw new Error('El email ya está registrado');
 
-  if (emailExiste) {
-    throw new Error('El email ya está registrado');
-  }
+  const hash = crypto.createHash('sha256').update(password.trim()).digest('hex');
 
-  const hash = crypto
-    .createHash('sha256')
-    .update(password.trim())
-    .digest('hex');
+  const id_usuario = await createUsuario({ documento, nombres, apellido, email, hash, foto_path });
 
-  const id_usuario = await createUsuario({
-    documento,
-    nombres,
-    apellido,
-    email,
-    hash
-  });
-
-  return {
-    id_usuario,
-    documento,
-    nombres,
-    apellido,
-    email
-  };
+  return { id_usuario, documento, nombres, apellido, email };
 };
 
-export {
-  login,
-  register
-};
+export { login, register };

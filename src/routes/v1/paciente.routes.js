@@ -9,30 +9,30 @@
  * @swagger
  * /api/v1/pacientes:
  *   get:
- *     summary: Obtener todos los pacientes
- *     tags:
- *       - Pacientes
+ *     summary: Listar pacientes
+ *     tags: [Pacientes]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de pacientes
  *   post:
  *     summary: Crear paciente
- *     tags:
- *       - Pacientes
+ *     tags: [Pacientes]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - id_usuario
- *               - id_obra_social
+ *             required: [id_usuario, id_obra_social]
  *             properties:
  *               id_usuario:
- *                 type: number
+ *                 type: integer
  *               id_obra_social:
- *                 type: number
+ *                 type: integer
  *     responses:
  *       201:
  *         description: Paciente creado
@@ -43,8 +43,9 @@
  * /api/v1/pacientes/{id}:
  *   get:
  *     summary: Obtener paciente por ID
- *     tags:
- *       - Pacientes
+ *     tags: [Pacientes]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -54,10 +55,13 @@
  *     responses:
  *       200:
  *         description: Paciente encontrado
+ *       404:
+ *         description: Paciente no encontrado
  *   put:
  *     summary: Editar paciente
- *     tags:
- *       - Pacientes
+ *     tags: [Pacientes]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -66,11 +70,12 @@
  *           type: integer
  *     responses:
  *       200:
- *         description: Paciente editado
+ *         description: Paciente actualizado
  *   delete:
  *     summary: Eliminar paciente (soft delete)
- *     tags:
- *       - Pacientes
+ *     tags: [Pacientes]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -82,62 +87,17 @@
  *         description: Paciente eliminado
  */
 
-/**
- * @swagger
- * /api/v1/pacientes/{id}/obras-sociales:
- *   put:
- *     summary: Asignar o actualizar obra social de un paciente
- *     tags:
- *       - Pacientes
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - id_obra_social
- *             properties:
- *               id_obra_social:
- *                 type: number
- *     responses:
- *       200:
- *         description: Obra social asignada correctamente
- */
-
 import express from 'express';
-import * as pCtrl from '../../controllers/paciente.controller.js';
+import * as pacienteCtrl from '../../controllers/paciente.controller.js';
 import { pacienteValidator } from '../../middlewares/paciente.validator.js';
-import { verificarToken } from '../../middlewares/auth.middleware.js';
 import validate from '../../middlewares/validate.js';
 
 const router = express.Router();
 
-//crud//
-
-router.get('/', pCtrl.getAll);
-
-router.get('/:id', pCtrl.getOne);
-
-router.post('/', pacienteValidator, validate, pCtrl.create);
-
-router.put('/:id', pacienteValidator, validate, pCtrl.edit);
-
-router.delete('/:id', pCtrl.remove);
-
-// OBRA SOCIAL (lo incluimos en paciente)
-router.put(
-  '/:id/obras-sociales',
-  verificarToken,
-  pCtrl.asociarPacienteObraSocialController
-);
+router.get('/', pacienteCtrl.getAll);
+router.get('/:id', pacienteCtrl.getOne);
+router.post('/', pacienteValidator, validate, pacienteCtrl.create);
+router.put('/:id', pacienteValidator, validate, pacienteCtrl.edit);
+router.delete('/:id', pacienteCtrl.remove);
 
 export default router;
