@@ -2,7 +2,7 @@ import pool from '../config/db.js';
 
 const findMedicoById = async (id_medico) => {
   const [rows] = await pool.query(
-    `SELECT id_medico, valor_consulta FROM medicos WHERE id_medico = ? AND activo = 1`,
+    `SELECT id_medico, valor_consulta FROM medicos WHERE id_medico = ?`,
     [id_medico]
   );
   return rows[0] || null;
