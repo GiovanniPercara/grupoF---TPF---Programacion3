@@ -17,7 +17,7 @@ const findByEspecialidad = async (id_especialidad) => {
 
 const actualizarEspecialidad = async (id_medico, id_especialidad) => {
   const [result] = await pool.query(
-    `UPDATE medicos SET id_especialidad = ? WHERE id_medico = ? AND activo = 1`,
+    `UPDATE medicos SET id_especialidad = ? WHERE id_medico = ?`,
     [id_especialidad, id_medico]
   );
   return result.affectedRows > 0;

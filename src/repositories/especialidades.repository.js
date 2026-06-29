@@ -15,4 +15,20 @@ const findById = async (id) => {
   return rows[0] || null;
 };
 
-export { findAll, findById };
+const create = async ({ nombre }) => {
+  const [result] = await pool.query(
+    'INSERT INTO especialidades (nombre, activo) VALUES (?, 1)',
+    [nombre]
+  );
+  return result.insertId;
+};
+
+const update = async (id, { nombre }) => {
+  const [result] = await pool.query(
+    'UPDATE especialidades SET nombre = ? WHERE id_especialidad = ? AND activo = 1',
+    [nombre, id]
+  );
+  return result.affectedRows > 0;
+};
+
+export { findAll, findById, create, update };

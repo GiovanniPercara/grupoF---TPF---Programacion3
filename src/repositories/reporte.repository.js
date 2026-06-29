@@ -7,7 +7,7 @@ export const obtenerTurnosPaciente = async (idPaciente) => {
       tr.id_turno_reserva,
       tr.fecha_hora,
       tr.valor_total,
-      tr.atentido AS atendido,
+      tr.atendido,
 
       up.nombres AS paciente_nombre,
       up.apellido AS paciente_apellido,

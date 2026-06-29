@@ -39,7 +39,7 @@ export const asociarMedicoObraSocialController = async (req, res) => {
     const { id } = req.params;
     const { id_medico } = req.body;
 
-    const resultado = await adminService.asociarMedicoObraSocial(id_medico, id);
+    const resultado = await adminService.asociarMedicoObraSocial(id_medico, parseInt(id));
     return res.status(201).json({
       ok: true,
       message: 'Médico asociado a la obra social correctamente',
@@ -52,7 +52,7 @@ export const asociarMedicoObraSocialController = async (req, res) => {
     if (error.message === 'El médico ya está asociado a esa obra social') {
       return res.status(409).json({ ok: false, error: error.message });
     }
-    return res.status(500).json({ ok: false, error: 'Error interno del servidor' });
+    return res.status(500).json({ ok: false, error: error.message });
   }
 };
 

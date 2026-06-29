@@ -9,3 +9,13 @@ export const buscarPorId = async (id) => {
   if (!especialidad) throw new Error('Especialidad no encontrada');
   return especialidad;
 };
+
+export const crearEspecialidad = async (datos) => {
+  return await especialidadRepo.create(datos);
+};
+
+export const editarEspecialidad = async (id, datos) => {
+  const actualizado = await especialidadRepo.update(id, datos);
+  if (!actualizado) throw new Error('Especialidad no encontrada');
+  return actualizado;
+};
