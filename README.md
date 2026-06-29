@@ -163,7 +163,7 @@ Configuración de base de datos y entorno.
 │   │   ├── auth.repository.js
 │   │   ├── especialidades.repository.js
 │   │   ├── estadisticas.repository.js
-│   │   ├── medico.repository.js
+│   │   ├── medicos.repository.js
 │   │   ├── paciente.repository.js
 │   │   ├── reporte.repository.js
 │   │   ├── turno.repository.js
