@@ -1,10 +1,6 @@
-
-# 🏥 GRUPO F — TPF Programación III
-
----
+# 🏥 GRUPO F — TPF Programación III (Recuperatorio)
 
 ## 🧑‍💻 Integrantes
-
 - Lucía Allassia
 - Martina Ascona
 - Estrella Cardozo
@@ -13,260 +9,83 @@
 
 ---
 
-## 🔧 Correcciones aplicadas (Trabajo Final Integrador - Recuperatorio)
+## 🔧 Correcciones Aplicadas
 
-### 1. CRUD 
+### 1. CRUD y Simplificación de Rutas
+* **Feedback:** *Eliminar rutas intermedias redundantes (`medicoEspecialidad`, `medicoObraSocial`, `pacienteObraSocial`).*
+* **Solución:** 
+  * Se eliminaron por completo las rutas e interfaces de `medicoEspecialidad` y anexos.
+  * La asociación Médico–Especialidad se absorbió mediante el método: `PUT /api/v1/medicos/:id/especialidad`.
+  * Las asociaciones de obras sociales se unificaron bajo el recurso administrativo correspondiente (`POST /api/v1/admin/obras-sociales/:id/medicos` y `POST /api/v1/admin/obras-sociales/:id/pacientes`), subsanando el bug de lectura de IDs en el cuerpo de la petición.
 
-**Corrección indicada:** *"La ruta medicoEspecialidad no es necesaria, se puede resolver con PUT en el acceso a datos de medicos. Lo mismo con medicoObraSocial y pacienteObraSocial."*
+### 2. Reglas de Negocio (Capa de Datos en Reportes)
+* **Feedback:** *Mal implementado el reporte, `reporte.service.js` accedía directo a los datos.*
+* **Solución:** Se aplicó una estricta separación de responsabilidades. Toda consulta SQL y llamadas al procedimiento almacenado se movieron a `reporte.repository.js`. El servicio ahora procesa puramente la lógica de negocio (generación del Buffer del PDF) y el controlador despacha la respuesta HTTP.
 
-**Qué hicimos:**
-- Eliminamos `medicoEspecialidad.routes.js`, `.controller.js`, `.service.js`, `.repository.js`
-- Eliminamos `medicoObraSocial.routes.js` y `medicoEspecialidad.validator.js`
-- La asociación médico–especialidad se resuelve con PUT /api/v1/medicos/:id/especialidad en la capa de médicos
-- La asociación médico–obra social se resuelve con `POST /api/v1/admin/obras-sociales/:id/medicos` que ya existía 
-- La asociación paciente–obra social se resuelve con `POST /api/v1/admin/obras-sociales/:id/pacientes`, corrigiendo el bug que leía `id_medico` del body en lugar de `id_paciente`
+### 3. Funcionalidades Técnicas (Transacciones MySQL)
+* **Feedback:** *Falta de transacciones en la persistencia.*
+* **Solución:** Se integró el flujo de transacciones (`beginTransaction`, `commit`, `rollback`) mediante `mysql2` en `createTurnoAdmin` (`turnoAdmin.repository.js`), asegurando la atomicidad y la consistencia en tablas críticas como `turnos_reservas`.
 
----
-
-### 2. Reglas de negocio 
-
-**Corrección indicada:** *"Mal implementado la creación del reporte. Acceden a los datos desde el servicio: reporte.service.js. Falta una capa de datos."*
-
-
-**Qué hicimos:**
-- El acceso a datos quedó exclusivamente en `reporte.repository.js`
-- El service ahora solo contiene la lógica de negocio: busca los datos usando el repository y genera el PDF, devolviendo un `Buffer`
-- El controller es el único que maneja `res`: recibe el buffer del service, configura los headers y envía el PDF al cliente
+### 4. Diseño REST (Rutas e Inyección de Middleware)
+* **Feedback:** *Ruta `post('/especialidades')` mal ubicada dentro de admin.*
+* **Solución:** Se modularizó el recurso de forma independiente bajo `/api/v1/especialidades`. Los métodos de consulta (`GET`) quedaron públicos para los roles del sistema, mientras que la creación (`POST`) y edición (`PUT`) se resguardan bajo el middleware de restricción de accesos `soloAdmin`.
 
 ---
 
-### 3. Funcionalidades técnicas — No se usaban transacciones MySQL
+## 🏗️ Arquitectura y Tecnologías
+API REST bajo una **Arquitectura en Capas (Layered Architecture)** estructurada en: *Routes -> Middlewares/Validators -> Controllers -> Services -> Repositories*.
 
-**Corrección indicada:** *"No usan transacciones de MySQL."*
-
-**Qué hicimos:**
-- Implementamos `beginTransaction`, `commit` y `rollback` en `createTurnoAdmin` dentro de `turnoAdmin.repository.js`
-- La transacción garantiza que si el INSERT en `turnos_reservas` falla por cualquier motivo, se ejecuta el `rollback` automáticamente y no queda ningún registro a medias en la base de datos
-
----
-
-### 4. Diseño REST 
-
-**Corrección indicada:** *"Rutas innecesarias o mal nombradas. Ejemplo: post('/especialidades') debería estar en la ruta de especialidades, no en la ruta de admin."*
-
-
-**Qué hicimos:**
-- Consolidamos las cuatro operaciones bajo `/api/v1/especialidades`
-- `GET /especialidades` y `GET /especialidades/:id` → accesible para los tres roles
-- `POST /especialidades` y `PUT /especialidades/:id` → solo administrador, protegido con el middleware `soloAdmin`
-- Eliminamos `GET /medicos/especialidades` que era una ruta duplicada
-- Eliminamos las rutas de especialidades que estaban dentro de `admin.routes.js`
-- Creamos `especialidades.controller.js`, `especialidades.service.js` y `especialidades.repository.js` para que el recurso tenga su propia capa completa
+* **Core:** Node.js, Express, MySQL (`mysql2`).
+* **Seguridad:** JWT (Autenticación y Autorización por Roles).
+* **Validaciones y Utilidades:** `express-validator`, `multer` (archivos), `dotenv`, `cors`, `morgan`.
+* **Documentación y Pruebas:** Swagger UI (`/api-docs`) y Bruno.
 
 ---
 
-
-## 📌 Descripción del proyecto
-
-API REST desarrollada con Node.js, Express y MySQL, siguiendo una arquitectura en capas (Layered Architecture) para garantizar escalabilidad, mantenibilidad y separación de responsabilidades.
-
-El sistema permite la gestión de una clínica médica, incluyendo:
-usuarios, pacientes, médicos, turnos, especialidades, obras sociales, estadísticas y reportes.
-
----
-
-## 🏗️ Arquitectura del proyecto
-
-El proyecto está organizado en capas:
-
-### 🔹 Routes
-Define los endpoints de la API y conecta las rutas con los controladores.
-
-### 🔹 Controllers
-Gestionan las solicitudes HTTP, validan parámetros básicos y devuelven respuestas.
-
-### 🔹 Services
-Contienen la lógica de negocio principal del sistema.
-
-### 🔹 Repositories
-Encargados del acceso a la base de datos MySQL.
-
-### 🔹 Middlewares
-Incluyen:
-- Autenticación con JWT
-- Autorización por roles
-- Validaciones de datos
-- Manejo de errores
-- Upload de archivos (Multer)
-
-### 🔹 Validaciones
-Uso de express-validator para asegurar integridad de datos.
-
-### 🔹 Config
-Configuración de base de datos y entorno.
-
----
-
-
-## 🛠️ Tecnologías utilizadas
-
-- Node.js
-- Express
-- MySQL
-- JWT (JSON Web Token)
-- Multer
-- dotenv
-- cors
-- morgan
-- nodemon
-- express-validator
-- Swagger (documentación API)
-- Bruno (testing de endpoints)
-
----
-
-## 📁 Estructura del proyecto
+## 📁 Estructura del Proyecto
 
 ```txt
 .
-├── package.json
-├── package-lock.json
 ├── README.md
+├── package.json
 ├── src
 │   ├── app.js
-│   ├── config
-│   │   └── db.js
-│   ├── controllers
-│   │   ├── admin.controllers.js
-│   │   ├── auth.controller.js
-│   │   ├── especialidades.controller.js
-│   │   ├── estadisticas.controller.js
-│   │   ├── medico.controller.js
-│   │   ├── paciente.controller.js
-│   │   ├── reporte.controller.js
-│   │   ├── turnoAdmin.controller.js
-│   │   ├── turno.controller.js
-│   │   └── turnosMedico.controller.js
-│   ├── middlewares
-│   │   ├── admin.middleware.js
-│   │   ├── admin.validator.js
-│   │   ├── auth.middleware.js
-│   │   ├── auth.validator.js
-│   │   ├── multerUpload.middleware.js
-│   │   ├── paciente.validator.js
-│   │   ├── role.middleware.js
-│   │   ├── turno.validator.js
-│   │   ├── turnoAdmin.validator.js
-│   │   └── validate.js
-│   ├── repositories
-│   │   ├── admin.repository.js
-│   │   ├── auth.repository.js
-│   │   ├── especialidades.repository.js
-│   │   ├── estadisticas.repository.js
-│   │   ├── medicos.repository.js
-│   │   ├── paciente.repository.js
-│   │   ├── reporte.repository.js
-│   │   ├── turno.repository.js
-│   │   ├── turnoAdmin.repository.js
-│   │   └── turnosMedico.repository.js
-│   ├── routes
-│   │   └── v1
-│   │       ├── admin.routes.js
-│   │       ├── auth.routes.js
-│   │       ├── especialidades.routes.js
-│   │       ├── estadisticas.routes.js
-│   │       ├── medico.routes.js
-│   │       ├── paciente.routes.js
-│   │       ├── reporte.routes.js
-│   │       ├── turno.routes.js
-│   │       ├── turnoAdmin.routes.js
-│   │       └── turnosMedico.routes.js
-│   ├── services
-│   │   ├── admin.service.js
-│   │   ├── auth.service.js
-│   │   ├── especialidades.service.js
-│   │   ├── estadisticas.service.js
-│   │   ├── medico.service.js
-│   │   ├── paciente.service.js
-│   │   ├── reporte.service.js
-│   │   ├── turno.service.js
-│   │   ├── turnoAdmin.service.js
-│   │   └── turnosMedico.service.js
-│   └── swagger.js
-└── uploads
-    └── (fotos de perfil de usuarios)
-```
+│   ├── config/          # Conexión DB (db.js)
+│   ├── controllers/     # Controladores de recursos y auth
+│   ├── middlewares/     # JWT, Roles, Multer y express-validator
+│   ├── repositories/    # Capa de Acceso a Datos (Consultas SQL / SP)
+│   ├── routes/v1/       # Endpoints modulares de la API
+│   ├── services/        # Lógica de negocio pura
+│   └── swagger.js       # Configuración de documentación
+└── uploads/             # Almacenamiento de imágenes de perfil
 
----
 
-## 🚀 Instalación y ejecución
+🚀 Instalación y Ejecución
+Instalar dependencias:
 
-### 1️⃣ Instalar dependencias
-
-```bash
+Bash
 npm install
-```
+Configurar el entorno: Crear un archivo .env en la raíz del proyecto siguiendo esta plantilla:
 
-### 2️⃣ Crear archivo .env
-
-Configurar variables de entorno:
-
-```env
-DB_HOST=
-DB_USER=
-DB_PASSWORD=
-DB_NAME=
-DB_PORT=
-JWT_SECRET=
+Fragmento de código
 PORT=3000
-```
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=prog3_turnos
+DB_PORT=3306
+JWT_SECRET=tu_clave_secreta
+Iniciar en modo desarrollo:
 
-### 3️⃣ Ejecutar el proyecto
-
-```bash
+Bash
 npm run dev
-```
+El servidor correrá en: http://localhost:3000
 
-Servidor disponible en:
+Documentación interactiva de la API (Swagger): http://localhost:3000/api-docs
 
-```
-http://localhost:3000
-```
+🧠 Buenas Prácticas Relevantes
+Separación de capas: Controladores libres de queries SQL, Servicios libres de objetos res de Express.
 
----
+Manejo transaccional: Persistencia segura en operaciones concurrentes de turnos.
 
-## 📌 Documentación API
-
-Swagger disponible en:
-
-```
-http://localhost:3000/api-docs
-```
-
----
-
-## ⚠️ Notas importantes
-
-- ❌ No se incluye `node_modules`
-- ❌ No se incluye `.env`
-- ✔️ Ejecutar `npm install` antes de iniciar
-- ✔️ La base de datos MySQL debe estar configurada previamente
-
----
-
-## 🧠 Buenas prácticas aplicadas
-
-- Arquitectura en capas
-- Separación de responsabilidades
-- Validación de datos con express-validator
-- Seguridad con JWT
-- Uso de variables de entorno
-- Transacciones MySQL en operaciones críticas
-- Organización modular del backend
-- Soft delete en todas las entidades
-
----
-
-## 📎 Observaciones finales
-
-El sistema implementa una API REST completa con autenticación, manejo de roles y documentación interactiva mediante Swagger.
+Integridad de datos: Sanitización rigurosa de entradas y persistencia con Soft Delete.
