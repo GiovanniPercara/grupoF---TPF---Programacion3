@@ -22,7 +22,7 @@
 **Qué hicimos:**
 - Eliminamos `medicoEspecialidad.routes.js`, `.controller.js`, `.service.js`, `.repository.js`
 - Eliminamos `medicoObraSocial.routes.js` y `medicoEspecialidad.validator.js`
-- La asociación médico–especialidad se resuelve con `PUT /api/v1/medicos/:id` en la capa de médicos
+- La asociación médico–especialidad se resuelve con PUT /api/v1/medicos/:id/especialidad en la capa de médicos
 - La asociación médico–obra social se resuelve con `POST /api/v1/admin/obras-sociales/:id/medicos` que ya existía 
 - La asociación paciente–obra social se resuelve con `POST /api/v1/admin/obras-sociales/:id/pacientes`, corrigiendo el bug que leía `id_medico` del body en lugar de `id_paciente`
 
@@ -163,7 +163,7 @@ Configuración de base de datos y entorno.
 │   │   ├── auth.repository.js
 │   │   ├── especialidades.repository.js
 │   │   ├── estadisticas.repository.js
-│   │   ├── medico.repository.js
+│   │   ├── medicos.repository.js
 │   │   ├── paciente.repository.js
 │   │   ├── reporte.repository.js
 │   │   ├── turno.repository.js
