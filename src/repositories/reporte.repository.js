@@ -16,7 +16,9 @@ export const obtenerTurnosPaciente = async (idPaciente) => {
       um.nombres AS medico_nombre,
       um.apellido AS medico_apellido,
 
-      e.nombre AS especialidad
+      e.nombre AS especialidad,
+
+      os.nombre AS obra_social
 
     FROM turnos_reservas tr
 
@@ -34,6 +36,9 @@ export const obtenerTurnosPaciente = async (idPaciente) => {
 
     INNER JOIN especialidades e
       ON m.id_especialidad = e.id_especialidad
+
+    INNER JOIN obras_sociales os
+      ON p.id_obra_social = os.id_obra_social
 
     WHERE tr.id_paciente = ?
 

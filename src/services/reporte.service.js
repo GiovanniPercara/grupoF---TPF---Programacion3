@@ -1,9 +1,7 @@
 import PDFDocument from "pdfkit";
 import { obtenerTurnosPaciente } from "../repositories/reporte.repository.js";
 
-
 const generarReportePaciente = async (idPaciente) => {
-
   const turnos = await obtenerTurnosPaciente(idPaciente);
 
   if (turnos.length === 0) {
@@ -12,15 +10,12 @@ const generarReportePaciente = async (idPaciente) => {
 
   const paciente = turnos[0];
 
-  
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ margin: 50 });
     const chunks = [];
 
-  
     doc.on("data", (chunk) => chunks.push(chunk));
 
-    
     doc.on("end", () => {
       resolve({
         buffer: Buffer.concat(chunks),
@@ -30,51 +25,213 @@ const generarReportePaciente = async (idPaciente) => {
 
     doc.on("error", reject);
 
-
-    doc.fontSize(24).text("CLINICA GRUPO F", { align: "center" });
-    doc.moveDown();
-    doc.fontSize(18).text("REPORTE DE TURNOS DEL PACIENTE", { align: "center" });
-    doc.moveDown(2);
+    // =====================================
+    // TÍTULO
+    // =====================================
 
     doc
-      .fontSize(12)
-      .text(`Paciente: ${paciente.paciente_nombre} ${paciente.paciente_apellido}`);
-    doc.text(`Documento: ${paciente.documento}`);
-    doc.text(`Fecha de generación: ${new Date().toLocaleDateString("es-AR")}`);
+      .font("Helvetica-Bold")
+      .fontSize(20)
+      .fillColor("black")
+      .text("CLÍNICA GRUPO F", {
+        align: "center",
+      });
 
-    doc.moveDown(2);
-    doc.text("========================================================");
-    doc.moveDown();
+    doc
+      .moveDown(0.3)
+      .fontSize(14)
+      .text("REPORTE DE TURNOS DEL PACIENTE", {
+        align: "center",
+      });
+
+    doc.moveDown(1.5);
+
+    // =====================================
+    // DATOS DEL PACIENTE
+    // =====================================
+
+    const inicioY = doc.y;
+
+    doc.rect(50, inicioY, 500, 85).stroke();
+
+    doc.font("Helvetica").fontSize(12);
+
+    doc.text(
+      `Paciente: ${paciente.paciente_nombre} ${paciente.paciente_apellido}`,
+      60,
+      inicioY + 10
+    );
+
+    doc.text(`Documento: ${paciente.documento}`);
+
+    doc.text(`Obra Social: ${paciente.obra_social}`);
+
+    doc.text(
+      `Fecha del reporte: ${new Date().toLocaleDateString("es-AR")}`
+    );
+
+    doc.moveDown(4);
+
+    // =====================================
+    // TABLA
+    // =====================================
+
+    const X_FECHA = 50;
+    const X_MEDICO = 130;
+    const X_ESPECIALIDAD = 300;
+    const X_VALOR = 430;
+    const X_ESTADO = 500;
+
+    const headerY = doc.y;
+
+    doc.font("Helvetica-Bold").fontSize(11);
+
+    doc.text("Fecha", X_FECHA, headerY);
+    doc.text("Médico", X_MEDICO, headerY);
+    doc.text("Especialidad", X_ESPECIALIDAD, headerY);
+    doc.text("Valor", X_VALOR, headerY);
+    doc.text("Estado", X_ESTADO, headerY);
+
+    doc
+      .moveTo(50, headerY + 18)
+      .lineTo(550, headerY + 18)
+      .stroke();
+
+    doc.font("Helvetica").fontSize(8);
+
+    doc.y = headerY + 28;
+
+    // =====================================
+    // DETALLE DE TURNOS
+    // =====================================
 
     let total = 0;
 
-    turnos.forEach((turno, index) => {
+    turnos.forEach((turno) => {
+
+      // Si la página se llena, crear otra
+      if (doc.y > 720) {
+        doc.addPage();
+
+        const nuevoHeader = doc.y;
+
+        doc.font("Helvetica-Bold").fontSize(11);
+
+        doc.text("Fecha", X_FECHA, nuevoHeader);
+        doc.text("Médico", X_MEDICO, nuevoHeader);
+        doc.text("Especialidad", X_ESPECIALIDAD, nuevoHeader);
+        doc.text("Valor", X_VALOR, nuevoHeader);
+        doc.text("Estado", X_ESTADO, nuevoHeader);
+
+        doc
+          .moveTo(50, nuevoHeader + 18)
+          .lineTo(550, nuevoHeader + 18)
+          .stroke();
+
+        doc.font("Helvetica").fontSize(10);
+
+        doc.y = nuevoHeader + 28;
+      }
+
       total += Number(turno.valor_total);
 
       const fecha = new Date(turno.fecha_hora).toLocaleDateString("es-AR");
 
-      doc.text(`${index + 1}) Fecha: ${fecha}`);
-      doc.text(`   Médico: ${turno.medico_nombre} ${turno.medico_apellido}`);
-      doc.text(`   Especialidad: ${turno.especialidad}`);
-      doc.text(`   Valor: $${Number(turno.valor_total).toFixed(2)}`);
-      doc.text(`   Atendido: ${turno.atendido ? "Sí" : "No"}`);
-      doc.moveDown();
+      const filaY = doc.y;
+
+      doc.text(fecha, X_FECHA, filaY);
+
+      doc.text(
+        `${turno.medico_nombre} ${turno.medico_apellido}`,
+        X_MEDICO,
+        filaY,
+        {
+          width: 150,
+        }
+      );
+
+      doc.text(
+        turno.especialidad,
+        X_ESPECIALIDAD,
+        filaY,
+        {
+          width: 100,
+        }
+      );
+
+      doc.text(
+        `$${Number(turno.valor_total).toFixed(2)}`,
+        X_VALOR,
+        filaY,
+        {
+          width: 55,
+          align: "right",
+        }
+      );
+
+      doc.text(
+        turno.atendido ? "Sí" : "No",
+        X_ESTADO,
+        filaY
+      );
+
+      
+      doc
+        .moveTo(50, filaY + 18)
+        .lineTo(550, filaY + 18)
+        .stroke();
+
+      doc.y = filaY + 24;
     });
 
-    doc.text("========================================================");
+    // =====================================
+    // RESUMEN
+    // =====================================
+
     doc.moveDown();
-    doc.fontSize(14).text(`Cantidad total de turnos: ${turnos.length}`);
-    doc.text(`Total abonado: $${total.toFixed(2)}`);
-    doc.moveDown(2);
+
+    const resumenY = doc.y;
+
+    doc.rect(50, resumenY, 500, 55).stroke();
+
+    doc.font("Helvetica-Bold").fontSize(10);
+
+    doc.text(
+      `Cantidad total de turnos: ${turnos.length}`,
+      60,
+      resumenY + 12
+    );
+
+    doc.text(
+      `Total abonado: $${total.toFixed(2)}`,
+      60,
+      resumenY + 30
+    );
+
+    // =====================================
+    // PIE DE PÁGINA
+    // =====================================
+
+    doc.moveDown(5);
 
     doc
-      .fontSize(10)
-      .text(`Reporte generado el ${new Date().toLocaleDateString("es-AR")}`, {
-        align: "center",
-      });
-    doc.text("Sistema de Gestión Clínica Grupo F", { align: "center" });
+      .font("Helvetica")
+      .fontSize(8)
+      .fillColor("black")
+      .text(
+        `Reporte generado el ${new Date().toLocaleDateString("es-AR")}`,
+        {
+          align: "center",
+        }
+      );
 
-    
+    doc.text(
+      "Sistema de Gestión Clínica - Grupo F",
+      {
+        align: "center",
+      }
+    );
+
     doc.end();
   });
 };

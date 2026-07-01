@@ -9,7 +9,7 @@ export const getReportePaciente = async (req, res) => {
     const { buffer, nombreArchivo } = await reporteService.generarReportePaciente(id);
 
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `attachment; filename=${nombreArchivo}`);
+    res.setHeader("Content-Disposition", `inline; filename="${nombreArchivo}"`);
     res.send(buffer);
 
   } catch (error) {
