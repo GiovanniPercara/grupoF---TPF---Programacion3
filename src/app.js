@@ -3,8 +3,6 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 import swaggerSpec from './swagger.js';
 import authRoutes from './routes/v1/auth.routes.js';
