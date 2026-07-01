@@ -19,8 +19,8 @@ const findByDocumento = async (documento) => {
 const createUsuario = async ({ documento, nombres, apellido, email, hash, foto_path }) => {
   const [result] = await pool.query(
     `INSERT INTO usuarios (documento, nombres, apellido, email, contrasenia, foto_path, rol, activo)
-     VALUES (?, ?, ?, ?, ?, ?, 2, 1)`, 
-    [documento, nombres, apellido, email, hash, foto_path] 
+     VALUES (?, ?, ?, ?, ?, ?, 2, 1)`,
+    [documento, nombres, apellido, email, hash, foto_path]
   );
   return result.insertId;
 };

@@ -61,7 +61,6 @@ const createTurno = async ({ id_medico, id_paciente, id_obra_social, fecha_hora,
 };
 
 
-
 export {
   findTurnoByMedicoAndFecha,
   findTurnosByPaciente,

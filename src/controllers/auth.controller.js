@@ -28,12 +28,11 @@ const loginController = async (req, res) => {
 
 const registerController = async (req, res) => {
   try {
-  
+    // Si el usuario subió una foto, construimos la ruta para guardarla en la base de datos, si no, dejamos el campo vacío
     const fotoPath = req.file ? `/uploads/${req.file.filename}` : '';
 
     const { documento, nombres, apellido, email, password } = req.body;
 
-  
     const usuario = await register({ 
       documento, 
       nombres, 
@@ -61,4 +60,4 @@ const registerController = async (req, res) => {
   }
 };
 
-export { loginController, registerController }; 
+export { loginController, registerController };
