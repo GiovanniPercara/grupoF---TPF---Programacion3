@@ -31,11 +31,7 @@ const generarReportePaciente = async (idPaciente) => {
     doc.on("error", reject);
 
 
-<<<<<<< HEAD
     doc.fontSize(24).text("CLINICA GRUPO F", { align: "center" });
-=======
-    doc.fontSize(24).text("CLINICA", { align: "center" });
->>>>>>> nueva-rama-andrea
     doc.moveDown();
     doc.fontSize(18).text("REPORTE DE TURNOS DEL PACIENTE", { align: "center" });
     doc.moveDown(2);

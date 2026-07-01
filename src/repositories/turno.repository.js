@@ -73,7 +73,6 @@ const updateTurno = async (id_turno_reserva, { id_medico, id_obra_social, fecha_
 =======
 >>>>>>> nueva-rama-andrea
 
-
 export {
   findTurnoByMedicoAndFecha,
   findTurnosByPaciente,

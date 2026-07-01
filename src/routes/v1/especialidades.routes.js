@@ -90,14 +90,13 @@ import * as especialidadCtrl from '../../controllers/especialidades.controller.j
 import { verificarToken } from '../../middlewares/auth.middleware.js';
 import { authorize } from '../../middlewares/role.middleware.js';
 import { soloAdmin } from '../../middlewares/admin.middleware.js';
-import { especialidadValidator } from '../../middlewares/admin.validator.js';
 import validate from '../../middlewares/validate.js';
 
 const router = express.Router();
 
 router.get('/', verificarToken, authorize(1, 2, 3), especialidadCtrl.getAll);
 router.get('/:id', verificarToken, authorize(1, 2, 3), especialidadCtrl.getOne);
-router.post('/', verificarToken, soloAdmin, especialidadValidator, validate, especialidadCtrl.crear);
-router.put('/:id', verificarToken, soloAdmin, especialidadValidator, validate, especialidadCtrl.editar);
+router.post('/', verificarToken, soloAdmin, validate, especialidadCtrl.crear);
+router.put('/:id', verificarToken, soloAdmin, validate, especialidadCtrl.editar);
 
 export default router;
