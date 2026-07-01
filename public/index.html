@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> CLINICA </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ---- ficha clínica: papel, tinta, pino ---- */
+    --paper:#f2f3ee; --surface:#ffffff; --surface-sunken:#e9ebe3;
+    --ink:#16211c; --muted:#5c6b60; --line:#d9ddd2;
+
+    --brand:#123830; --brand-dark:#0b241e; --brand-soft:#dcece3;
+
+    /* ---- color de credencial por rol (como las pulseras de admisión) ---- */
+    --role-medico:#2c5c86;     --role-medico-soft:#e1eaf3;
+    --role-paciente:#a9631f;   --role-paciente-soft:#f1e3cd;
+    --role-admin:#6b3459;      --role-admin-soft:#eee0ea;
+
+    --danger:#9c3a30; --danger-soft:#f4e2df;
+    --amber:#8c6420;  --amber-soft:#efe3c8;
+
+    --role-accent:var(--brand);
+    --role-accent-soft:var(--brand-soft);
+
+    --radius:8px; --radius-sm:6px;
+    --serif:'Fraunces', 'Iowan Old Style', Georgia, serif;
+    --sans:'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --mono:'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;margin:0;letter-spacing:-0.01em}
+  ::selection{background:var(--brand-soft)}
+  :focus-visible{outline:2px solid var(--role-accent);outline-offset:2px}
+
+  /* ---------- LOGIN ---------- */
+  #loginScreen{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+  .login-art{
+    position:relative;overflow:hidden;
+    background:var(--brand);color:#fff;
+    display:flex;flex-direction:column;justify-content:space-between;padding:48px;
+  }
+  .login-art::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:repeating-linear-gradient(to bottom, rgba(255,255,255,.05) 0 1px, transparent 1px 29px);
+  }
+  .login-art::after{
+    content:"";position:absolute;top:0;bottom:0;left:76px;width:1px;
+    background:rgba(217,105,79,.35);pointer-events:none;
+  }
+  .login-art > *{position:relative}
+  .login-art .mark{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:19px;font-weight:600}
+  .login-art .mark svg{width:26px;height:26px}
+  .login-art .pitch{max-width:400px}
+  .login-art .pitch .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#a9c9bb;margin-bottom:14px}
+  .login-art .pitch h1{font-size:33px;line-height:1.16;color:#fff;margin-bottom:16px;font-variation-settings:"opsz" 60}
+  .login-art .pitch p{color:#c8ddd0;font-size:14px}
+  .login-art .roles{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
+  .role-chip{
+    display:flex;align-items:center;gap:7px;
+    border:1px solid rgba(255,255,255,.18);border-radius:99px;
+    padding:6px 13px 6px 8px;font-size:11.5px;color:#eef6f1;background:rgba(255,255,255,.04);
+  }
+  .role-chip i{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+  .role-chip.rc-medico i{background:#7fb2e0}
+  .role-chip.rc-paciente i{background:#e8ac66}
+  .role-chip.rc-admin i{background:#c98fb4}
+
+  .login-art .credits{
+    font-family:var(--mono);font-size:11px;color:#9fc0b0;
+    border:1px dashed rgba(255,255,255,.22);border-radius:var(--radius-sm);
+    padding:12px 14px;background:rgba(0,0,0,.08);
+  }
+  .login-art .credits .label{letter-spacing:.12em;text-transform:uppercase;color:#7fa895;margin-bottom:8px;font-size:10px}
+  .login-art .credits ul{margin:0;padding:0;list-style:none;display:grid;gap:3px}
+  .login-art .credits li::before{content:"— ";color:#5f8b76}
+  .login-art .foot{font-size:11px;color:#7fa895;font-family:var(--mono);letter-spacing:.02em}
+
+  .login-form-wrap{display:flex;align-items:center;justify-content:center;padding:32px}
+  .login-card{width:100%;max-width:360px}
+  .login-card h2{font-size:23px;margin-bottom:4px}
+  .login-card .sub{color:var(--muted);margin-bottom:26px;font-size:13px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:6px;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+  .field input,.field select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--surface);font-size:14px;color:var(--ink);font-family:inherit}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+  .btn-primary{width:100%;background:var(--brand);color:#fff;border:none;padding:12px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+  .btn-primary:hover{background:var(--brand-dark)}
+  .btn-primary:disabled{opacity:.55;cursor:not-allowed}
+  .login-error{background:var(--danger-soft);color:var(--danger);border-radius:var(--radius-sm);padding:10px 12px;font-size:12.5px;margin-bottom:16px;display:none}
+  .login-error.show{display:block}
+  .advanced{margin-top:20px;border-top:1px solid var(--line);padding-top:14px}
+  .advanced summary{cursor:pointer;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+  .advanced input{margin-top:8px;font-family:var(--mono);font-size:12.5px}
+
+  /* ---------- APP SHELL ---------- */
+  #appScreen{display:none;min-height:100vh}
+  #appScreen.show{display:block}
+  #loginScreen.hide{display:none}
+
+  header.topbar{background:var(--surface);border-bottom:1px solid var(--line);padding:14px 28px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:10}
+  .brand{display:flex;align-items:center;gap:9px;font-family:var(--serif);font-size:17px;font-weight:600;color:var(--brand)}
+  .brand svg{width:21px;height:21px}
+  .user-pill{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .user-pill .who{text-align:right}
+  .user-pill .who .name{font-size:13px;font-weight:600}
+  .user-pill .who .rol{font-size:10.5px;color:var(--role-accent);font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase}
+  .avatar{width:33px;height:33px;border-radius:8px;background:var(--role-accent-soft);color:var(--role-accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12.5px;font-family:var(--mono)}
+  .logout-btn{background:none;border:1px solid var(--line);color:var(--muted);padding:7px 13px;border-radius:var(--radius-sm);cursor:pointer;font-size:12.5px;font-family:inherit}
+  .logout-btn:hover{border-color:var(--danger);color:var(--danger)}
+
+  .tabs{display:flex;gap:2px;padding:0 28px;background:var(--surface);border-bottom:1px solid var(--line);overflow-x:auto}
+  .tab-btn{
+    background:none;border:none;padding:14px 15px;cursor:pointer;white-space:nowrap;font-family:var(--sans);
+    font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+    border-bottom:2px solid transparent;
+  }
+  .tab-btn:hover{color:var(--ink)}
+  .tab-btn.active{color:var(--role-accent);border-bottom-color:var(--role-accent)}
+
+  main.content{padding:28px;max-width:1080px;margin:0 auto}
+  .tab-panel{display:none}
+  .tab-panel.active{display:block}
+
+  .panel-head{margin-bottom:18px}
+  .panel-head h2{font-size:20px}
+  .panel-head p{color:var(--muted);font-size:13px;margin-top:4px}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:18px}
+  .card-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .card-head h3{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .card-head h3::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--role-accent);margin-right:8px}
+  .card-head .right{margin-left:auto}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:12px}
+  .field-sm label{display:block;font-size:10.5px;color:var(--muted);margin-bottom:4px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+  .field-sm input,.field-sm select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;background:#fff}
+  .field-sm input:focus,.field-sm select:focus{outline:none;border-color:var(--role-accent)}
+
+  .btn{background:var(--role-accent);color:#fff;border:none;padding:9px 16px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;transition:filter .15s}
+  .btn:hover{filter:brightness(0.88)}
+  .btn.secondary{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+  .btn.secondary:hover{border-color:var(--role-accent);color:var(--role-accent);filter:none}
+  .btn.danger{background:var(--danger-soft);color:var(--danger);border:1px solid transparent}
+  .btn.danger:hover{background:var(--danger);color:#fff;filter:none}
+  .btn.sm{padding:6px 11px;font-size:12px}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead th{text-align:left;color:var(--muted);font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;padding:8px 10px;border-bottom:1px solid var(--line)}
+  tbody td{padding:10px;border-bottom:1px solid var(--line)}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:var(--paper)}
+  .empty-row{color:var(--muted);text-align:center;padding:24px 10px;font-size:12.5px}
+  .cid{font-family:var(--mono);color:var(--muted);letter-spacing:.02em}
+
+  .pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:10.5px;font-weight:700;font-family:var(--mono);letter-spacing:.03em}
+  .pill.ok{background:var(--brand-soft);color:var(--brand)}
+  .pill.pending{background:var(--amber-soft);color:var(--amber)}
+
+  .msg{border-radius:var(--radius-sm);padding:9px 12px;font-size:12.5px;margin-top:10px;display:none}
+  .msg.show{display:block}
+  .msg.ok{background:var(--brand-soft);color:var(--brand)}
+  .msg.err{background:var(--danger-soft);color:var(--danger)}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:760px){
+    #loginScreen{grid-template-columns:1fr}
+    .login-art{display:none}
+    .two-col{grid-template-columns:1fr}
+    main.content{padding:18px}
+    header.topbar{padding:12px 16px}
+    .tabs{padding:0 16px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginScreen">
+  <div class="login-art">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6l-8-4z" stroke="#fff" stroke-width="1.4"/><path d="M12 8v8M8 12h8" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+      Clinica
+    </div>
+    <div class="pitch">
+      <div class="eyebrow">TRABAJO FINAL INTEGRADOR</div>
+      <h1>PROGRAMACIÓN III – 2026 1er cuatrimestre</h1>
+      <p>TECNICATURA UNIVERSITARIA EN DESARROLLO WEB</p>
+      <div class="roles">
+        <span class="role-chip rc-medico"><i></i>Médico · agenda y atención</span>
+        <span class="role-chip rc-paciente"><i></i>Paciente · turnos y especialidades</span>
+        <span class="role-chip rc-admin"><i></i>Administración · gestión completa</span>
+      </div>
+    </div>
+    <div class="credits">
+
+      <div class="label"> GRUPO F</div>
+      <ul>
+        <li>Lucía Allassia</li>
+        <li>Martina Ascona</li>
+        <li>Estrella Cardozo</li>
+        <li>Giovanni Percara</li>
+        <li>Andrea Natalia Segovia</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="login-form-wrap">
+    <div class="login-card">
+      <h2>Iniciar sesión</h2>
+      <p class="sub">Ingresá con tu email y contraseña.</p>
+
+      <div id="loginError" class="login-error"></div>
+
+      <form id="loginForm" onsubmit="return false;">
+        <div class="field">
+          <label>Email</label>
+          <input id="email" type="email" autocomplete="username" placeholder="nombre@mail.com" required>
+        </div>
+        <div class="field">
+          <label>Contraseña</label>
+          <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+        </div>
+        <button class="btn-primary" id="loginBtn" onclick="login()">Ingresar</button>
+      </form>
+
+      <details class="advanced">
+        <summary>Opciones avanzadas</summary>
+        <label style="font-size:11px;color:var(--muted);font-weight:600;display:block;margin-top:8px;text-transform:uppercase;letter-spacing:.03em">URL del servidor</label>
+        <input id="baseUrl" value="http://localhost:3000/api/v1">
+      </details>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="appScreen">
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6l-8-4z" stroke="#123830" stroke-width="1.5"/><path d="M12 8v8M8 12h8" stroke="#123830" stroke-width="1.7" stroke-linecap="round"/></svg>
+      Clínica Grupo F
+    </div>
+    <div class="user-pill">
+      <div class="who">
+        <div class="name" id="userName">—</div>
+        <div class="rol" id="userRol">—</div>
+      </div>
+      <div class="avatar" id="userAvatar">—</div>
+      <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <main class="content" id="content"></main>
+</div>
+
+<script>
+let TOKEN = null;
+let USER = null;
+
+function getBase(){ return document.getElementById('baseUrl').value.replace(/\/$/,''); }
+
+async function api(method, path, body, query){
+  let url = getBase() + path;
+  if(query){
+    const qs = Object.entries(query).filter(([,v])=>v!=='' && v!=null).map(([k,v])=>`${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
+    if(qs) url += '?'+qs;
+  }
+  const headers = {};
+  if(TOKEN) headers['Authorization'] = 'Bearer '+TOKEN;
+  let fetchBody;
+  if(body){ headers['Content-Type']='application/json'; fetchBody = JSON.stringify(body); }
+  const res = await fetch(url, {method, headers, body:fetchBody});
+  const ct = res.headers.get('content-type')||'';
+  const data = ct.includes('application/json') ? await res.json() : await res.text();
+  return {status:res.status, ok:res.ok, data};
+}
+
+function showMsg(elId, ok, text){
+  const el = document.getElementById(elId);
+  if(!el) return;
+  el.className = 'msg show ' + (ok?'ok':'err');
+  el.textContent = text;
+  setTimeout(()=>{ el.classList.remove('show'); }, 4500);
+}
+
+// ---------------- LOGIN ----------------
+async function login(){
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const errBox = document.getElementById('loginError');
+  errBox.classList.remove('show');
+  if(!email || !password){
+    errBox.textContent = 'Completá email y contraseña.';
+    errBox.classList.add('show');
+    return;
+  }
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Ingresando…';
+  try{
+    const r = await api('POST', '/auth/login', {email, password});
+    if(r.ok && r.data && r.data.ok){
+      TOKEN = r.data.data.token;
+      USER = r.data.data.usuario;
+      enterApp();
+    } else {
+      errBox.textContent = (r.data && (r.data.error || r.data.message)) || 'Credenciales inválidas.';
+      errBox.classList.add('show');
+    }
+  } catch(e){
+    errBox.textContent = `No se pudo conectar con ${getBase()}. ¿Está el servidor corriendo?`;
+    errBox.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Ingresar';
+  }
+}
+
+function logout(){
+  TOKEN = null; USER = null;
+  document.documentElement.style.removeProperty('--role-accent');
+  document.documentElement.style.removeProperty('--role-accent-soft');
+  document.getElementById('appScreen').classList.remove('show');
+  document.getElementById('loginScreen').classList.remove('hide');
+  document.getElementById('email').value=''; document.getElementById('password').value='';
+}
+
+const ROL_INFO = {
+  1: {label:'Médico',         initials:'MD', accent:'--role-medico',    soft:'--role-medico-soft'},
+  2: {label:'Paciente',       initials:'PA', accent:'--role-paciente',  soft:'--role-paciente-soft'},
+  3: {label:'Administrador',  initials:'AD', accent:'--role-admin',     soft:'--role-admin-soft'}
+};
+
+function enterApp(){
+  document.getElementById('loginScreen').classList.add('hide');
+  document.getElementById('appScreen').classList.add('show');
+  const info = ROL_INFO[USER.rol] || {label:'Usuario', initials:'?', accent:'--brand', soft:'--brand-soft'};
+
+  // credencial de color por rol: tiñe tabs, avatar y botones del resto de la sesión
+  const root = document.documentElement.style;
+  root.setProperty('--role-accent', `var(${info.accent})`);
+  root.setProperty('--role-accent-soft', `var(${info.soft})`);
+
+  document.getElementById('userName').textContent = `${USER.nombres||''} ${USER.apellido||''}`.trim() || USER.email;
+  document.getElementById('userRol').textContent = info.label;
+  document.getElementById('userAvatar').textContent = info.initials;
+  renderRoleApp(USER.rol);
+}
+
+// ---------------- ROUTING POR ROL ----------------
+function renderRoleApp(rol){
+  const tabsConfig = {
+    1: [ {id:'agenda', label:'Mi agenda'} ],
+    2: [ {id:'reservar', label:'Reservar turno'}, {id:'misturnos', label:'Mis turnos'}, {id:'directorio', label:'Especialidades y médicos'} ],
+    3: [ {id:'especialidades', label:'Especialidades'}, {id:'medicos', label:'Médicos'}, {id:'obrassociales', label:'Obras sociales'}, {id:'pacientes', label:'Pacientes'}, {id:'turnos', label:'Registrar turno'}, {id:'estadisticas', label:'Estadísticas'}, {id:'reportes', label:'Reportes'} ]
+  };
+  const tabs = tabsConfig[rol] || [];
+  const tabsEl = document.getElementById('tabs');
+  const contentEl = document.getElementById('content');
+  tabsEl.innerHTML = '';
+  contentEl.innerHTML = '';
+
+  tabs.forEach((t,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i===0?' active':'');
+    btn.textContent = t.label;
+    btn.id = 'tabbtn_'+t.id;
+    btn.onclick = () => switchTab(t.id);
+    tabsEl.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.className = 'tab-panel' + (i===0?' active':'');
+    panel.id = 'panel_'+t.id;
+    contentEl.appendChild(panel);
+  });
+
+  if(rol===1) initMedico();
+  else if(rol===2) initPaciente();
+  else if(rol===3) initAdmin();
+}
+
+function switchTab(id){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.id==='tabbtn_'+id));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active', p.id==='panel_'+id));
+}
+
+function escapeHtml(s){
+  return String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmtFecha(f){
+  if(!f) return '—';
+  const d = new Date(f);
+  if(isNaN(d)) return f;
+  return d.toLocaleString('es-AR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+// número de ficha con relleno de ceros, como un número de historia clínica
+function cid(n){
+  return `<span class="cid">#${String(n).padStart(4,'0')}</span>`;
+}
+
+/* ============================================================
+   ROL 1 — MÉDICO: listar turnos propios + marcar atendido
+   ============================================================ */
+function initMedico(){
+  const panel = document.getElementById('panel_agenda');
+  panel.innerHTML = `
+    <div class="panel-head">
+      <h2>Mi agenda</h2>
+      <p>Tus turnos asignados. Marcá un turno como atendido cuando finalices la consulta.</p>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <h3>Turnos</h3>
+        <div class="right"><button class="btn secondary sm" onclick="cargarAgendaMedico()">Actualizar</button></div>
+      </div>
+      <div id="agendaTableWrap"><p class="empty-row">Cargando…</p></div>
+      <div id="msg_agenda" class="msg"></div>
+    </div>
+  `;
+  cargarAgendaMedico();
+}
+
+async function cargarAgendaMedico(){
+  const wrap = document.getElementById('agendaTableWrap');
+  const r = await api('GET', '/turnos-medico/mis-turnos');
+  if(!r.ok){ wrap.innerHTML = `<p class="empty-row">${escapeHtml((r.data&&r.data.error)||'No se pudo cargar la agenda.')}</p>`; return; }
+  const turnos = (r.data && r.data.data && r.data.data.turnos) || (r.data && r.data.data) || r.data.turnos || [];
+  const lista = Array.isArray(turnos) ? turnos : [];
+  if(lista.length===0){ wrap.innerHTML = '<p class="empty-row">No tenés turnos asignados.</p>'; return; }
+  wrap.innerHTML = `
+    <table>
+      <thead><tr><th>Fecha</th><th>Paciente</th><th>Obra social</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+        ${lista.map(t => `
+          <tr>
+            <td>${fmtFecha(t.fecha_hora)}</td>
+            <td>${cid(t.id_paciente)}</td>
+            <td>${escapeHtml(t.obra_social)}</td>
+            <td>${t.atendido ? '<span class="pill ok">Atendido</span>' : '<span class="pill pending">Pendiente</span>'}</td>
+            <td>${t.atendido ? '' : `<button class="btn sm" onclick="marcarAtendido(${t.id_turno_reserva})">Marcar atendido</button>`}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>`;
+}
+
+async function marcarAtendido(id){
+  const r = await api('PATCH', `/turnos-medico/${id}/atender`);
+  showMsg('msg_agenda', r.ok, (r.data && (r.data.message||r.data.error)) || (r.ok?'Turno actualizado.':'No se pudo actualizar.'));
+  if(r.ok) cargarAgendaMedico();
+}
+
+/* ============================================================
+   ROL 2 — PACIENTE: reservar turno, listar turnos, especialidades, médicos
+   ============================================================ */
+function initPaciente(){
+  const reservar = document.getElementById('panel_reservar');
+  reservar.innerHTML = `
+    <div class="panel-head"><h2>Reservar turno</h2><p>Elegí especialidad y médico, indicá tu obra social y la fecha que te queda cómoda.</p></div>
+    <div class="card">
+      <div class="grid">
+        <div class="field-sm"><label>Especialidad</label><select id="r_especialidad" onchange="cargarMedicosPorEspecialidad()"><option value="">Todas</option></select></div>
+        <div class="field-sm"><label>Médico</label><select id="r_medico"><option value="">Seleccioná especialidad primero</option></select></div>
+        <div class="field-sm"><label>ID de tu obra social</label><input id="r_obra" placeholder="ej: 1"></div>
+        <div class="field-sm"><label>Fecha y hora</label><input id="r_fecha" type="datetime-local"></div>
+      </div>
+      <button class="btn" onclick="reservarTurno()">Confirmar reserva</button>
+      <div id="msg_reservar" class="msg"></div>
+    </div>
+  `;
+
+  const mis = document.getElementById('panel_misturnos');
+  mis.innerHTML = `
+    <div class="panel-head"><h2>Mis turnos</h2><p>Historial y próximos turnos reservados.</p></div>
+    <div class="card">
+      <div class="card-head"><h3>Turnos</h3><div class="right"><button class="btn secondary sm" onclick="cargarMisTurnos()">Actualizar</button></div></div>
+      <div id="misTurnosWrap"><p class="empty-row">Cargando…</p></div>
+    </div>
+  `;
+
+  const dir = document.getElementById('panel_directorio');
+  dir.innerHTML = `
+    <div class="panel-head"><h2>Especialidades y médicos</h2><p>Consultá qué especialidades atendemos y quiénes son los profesionales.</p></div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-head"><h3>Especialidades</h3></div>
+        <div id="dirEspecialidadesWrap"><p class="empty-row">Cargando…</p></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Médicos</h3></div>
+        <div class="grid" style="grid-template-columns:1fr"><div class="field-sm"><label>Filtrar por especialidad</label><select id="dir_filtro_esp" onchange="cargarDirectorioMedicos()"><option value="">Todas</option></select></div></div>
+        <div id="dirMedicosWrap"><p class="empty-row">Cargando…</p></div>
+      </div>
+    </div>
+  `;
+
+  cargarEspecialidadesEnSelects();
+  cargarMisTurnos();
+  cargarDirectorioMedicos();
+}
+
+async function cargarEspecialidadesEnSelects(){
+  const r = await api('GET', '/especialidades');
+  const lista = (r.ok && r.data && r.data.data) ? r.data.data : [];
+  const opciones = lista.map(e => `<option value="${e.id_especialidad}">${escapeHtml(e.nombre)}</option>`).join('');
+
+  const selReservar = document.getElementById('r_especialidad');
+  if(selReservar) selReservar.innerHTML = '<option value="">Todas</option>' + opciones;
+
+  const selDir = document.getElementById('dir_filtro_esp');
+  if(selDir) selDir.innerHTML = '<option value="">Todas</option>' + opciones;
+
+  const wrapDir = document.getElementById('dirEspecialidadesWrap');
+  if(wrapDir){
+    wrapDir.innerHTML = lista.length ? `
+      <table><thead><tr><th>Nombre</th></tr></thead>
+      <tbody>${lista.map(e=>`<tr><td>${escapeHtml(e.nombre)}</td></tr>`).join('')}</tbody></table>
+    ` : '<p class="empty-row">Sin especialidades cargadas.</p>';
+  }
+}
+
+async function cargarMedicosPorEspecialidad(){
+  const idEsp = document.getElementById('r_especialidad').value;
+  const sel = document.getElementById('r_medico');
+  const r = await api('GET', '/medicos', null, {id_especialidad: idEsp});
+  const lista = (r.ok && r.data && r.data.data) ? r.data.data : [];
+  sel.innerHTML = lista.length
+    ? lista.map(m=>`<option value="${m.id_medico}">${escapeHtml(m.nombres)} ${escapeHtml(m.apellido)}</option>`).join('')
+    : '<option value="">No hay médicos para esa especialidad</option>';
+}
+
+async function cargarDirectorioMedicos(){
+  const idEsp = document.getElementById('dir_filtro_esp') ? document.getElementById('dir_filtro_esp').value : '';
+  const wrap = document.getElementById('dirMedicosWrap');
+  const r = await api('GET', '/medicos', null, {id_especialidad: idEsp});
+  const lista = (r.ok && r.data && r.data.data) ? r.data.data : [];
+  wrap.innerHTML = lista.length ? `
+    <table><thead><tr><th>Nombre</th><th>Email</th></tr></thead>
+    <tbody>${lista.map(m=>`<tr><td>${escapeHtml(m.nombres)} ${escapeHtml(m.apellido)}</td><td>${escapeHtml(m.email)}</td></tr>`).join('')}</tbody></table>
+  ` : '<p class="empty-row">No hay médicos para mostrar.</p>';
+}
+
+async function reservarTurno(){
+  const id_medico = document.getElementById('r_medico').value;
+  const id_obra_social = document.getElementById('r_obra').value;
+  const fechaInput = document.getElementById('r_fecha').value;
+  if(!id_medico || !id_obra_social || !fechaInput){
+    showMsg('msg_reservar', false, 'Completá médico, obra social y fecha.');
+    return;
+  }
+  const fecha_hora = fechaInput.length===16 ? fechaInput+':00' : fechaInput;
+  const r = await api('POST', '/turnos', {
+    id_medico: Number(id_medico),
+    id_obra_social: Number(id_obra_social),
+    fecha_hora,
+    valor_total: 0
+  });
+  showMsg('msg_reservar', r.ok, (r.data && (r.data.data && r.data.data.message || r.data.message || r.data.error)) || (r.ok?'Turno reservado.':'No se pudo reservar.'));
+  if(r.ok) cargarMisTurnos();
+}
+
+async function cargarMisTurnos(){
+  const wrap = document.getElementById('misTurnosWrap');
+  if(!wrap) return;
+  const r = await api('GET', '/turnos');
+  const lista = (r.ok && r.data && r.data.data && r.data.data.turnos) || [];
+  wrap.innerHTML = lista.length ? `
+    <table><thead><tr><th>Fecha</th><th>Médico</th><th>Valor</th><th>Estado</th></tr></thead>
+    <tbody>${lista.map(t=>`
+      <tr>
+        <td>${fmtFecha(t.fecha_hora)}</td>
+        <td>${cid(t.id_medico)}</td>
+        <td>$${Number(t.valor_total).toFixed(2)}</td>
+        <td>${t.atendido ? '<span class="pill ok">Atendido</span>' : '<span class="pill pending">Pendiente</span>'}</td>
+      </tr>`).join('')}</tbody></table>
+  ` : '<p class="empty-row">Todavía no reservaste turnos.</p>';
+}
+
+/* ============================================================
+   ROL 3 — ADMIN
+   ============================================================ */
+function initAdmin(){
+  renderAdminEspecialidades();
+  renderAdminMedicos();
+  renderAdminObrasSociales();
+  renderAdminPacientes();
+  renderAdminTurnos();
+  renderAdminEstadisticas();
+  renderAdminReportes();
+}
+
+/* --- Especialidades --- */
+function renderAdminEspecialidades(){
+  const p = document.getElementById('panel_especialidades');
+  p.innerHTML = `
+    <div class="panel-head"><h2>Especialidades</h2><p>Listar, crear y editar especialidades médicas.</p></div>
+    <div class="card">
+      <div class="card-head"><h3>Crear especialidad</h3></div>
+      <div class="grid"><div class="field-sm"><label>Nombre</label><input id="ae_nombre"></div></div>
+      <button class="btn" onclick="adminCrearEspecialidad()">Crear</button>
+      <div id="msg_ae" class="msg"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Especialidades cargadas</h3><div class="right"><button class="btn secondary sm" onclick="adminCargarEspecialidades()">Actualizar</button></div></div>
+      <div id="aeTableWrap"><p class="empty-row">Cargando…</p></div>
+    </div>
+  `;
+  adminCargarEspecialidades();
+}
+async function adminCrearEspecialidad(){
+  const nombre = document.getElementById('ae_nombre').value.trim();
+  if(!nombre){ showMsg('msg_ae', false, 'Ingresá un nombre.'); return; }
+  const r = await api('POST', '/especialidades', {nombre});
+  showMsg('msg_ae', r.ok, (r.data && (r.data.message||r.data.error)) || (r.ok?'Creada.':'Error.'));
+  if(r.ok){ document.getElementById('ae_nombre').value=''; adminCargarEspecialidades(); cargarEspecialidadesGlobalAdmin(); }
+}
+async function adminCargarEspecialidades(){
+  const wrap = document.getElementById('aeTableWrap');
+  const r = await api('GET', '/especialidades');
+  const lista = (r.ok && r.data && r.data.data) ? r.data.data : [];
+  window.__especialidades = lista;
+  wrap.innerHTML = lista.length ? `
+    <table><thead><tr><th>ID</th><th>Nombre</th><th></th></tr></thead>
+    <tbody>${lista.map(e=>`
+      <tr>
+        <td>${cid(e.id_especialidad)}</td>
+        <td><input class="esp-edit-input" data-id="${e.id_especialidad}" value="${escapeHtml(e.nombre)}" style="border:1px solid var(--line);border-radius:7px;padding:5px 8px;font-size:13px;width:90%"></td>
+        <td><button class="btn secondary sm" onclick="adminEditarEspecialidad(${e.id_especialidad})">Guardar</button></td>
+      </tr>`).join('')}</tbody></table>
+  ` : '<p class="empty-row">Sin especialidades.</p>';
+  cargarEspecialidadesGlobalAdmin();
+}
+async function adminEditarEspecialidad(id){
+  const input = document.querySelector(`.esp-edit-input[data-id="${id}"]`);
+  const r = await api('PUT', `/especialidades/${id}`, {nombre: input.value.trim()});
+  showMsg('msg_ae', r.ok, r.ok?'Especialidad actualizada.':((r.data&&r.data.error)||'No se pudo editar.'));
+  if(r.ok) cargarEspecialidadesGlobalAdmin();
+}
+async function cargarEspecialidadesGlobalAdmin(){
+  const r = await api('GET', '/especialidades');
+  const lista = (r.ok && r.data && r.data.data) ? r.data.data : [];
+  const opciones = lista.map(e=>`<option value="${e.id_especialidad}">${escapeHtml(e.nombre)}</option>`).join('');
+  const sel = document.getElementById('am_especialidad');
+  if(sel) sel.innerHTML = '<option value="">Seleccioná…</option>' + opciones;
+}
+
+/* --- Médicos: asociar especialidad --- */
+function renderAdminMedicos(){
+  const p = document.getElementById('panel_medicos');
+  p.innerHTML = `
+    <div class="panel-head"><h2>Médicos</h2><p>Asociar (cambiar) la especialidad de un médico.</p></div>
+    <div class="card">
+      <div class="card-head"><h3>Médicos registrados</h3><div class="right"><button class="btn secondary sm" onclick="adminCargarMedicos()">Actualizar</button></div></div>
+      <div id="amTableWrap"><p class="empty-row">Cargando…</p></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Asociar especialidad</h3></div>
+      <div class="grid">
+        <div class="field-sm"><label>ID médico</label><input id="am_medico"></div>
+        <div class="field-sm"><label>Especialidad</label><select id="am_especialidad"><option value="">Seleccioná…</option></select></div>
+      </div>
+      <button class="btn" onclick="adminAsociarEspecialidad()">Guardar</button>
+      <div id="msg_am" class="msg"></div>
+    </div>
+  `;
+  adminCargarMedicos();
+}
+async function adminCargarMedicos(){
+  const wrap = document.getElementById('amTableWrap');
+  const r = await api('GET', '/medicos');
+  const lista = (r.ok && r.data && r.data.data) ? r.data.data : [];
+  wrap.innerHTML = lista.length ? `
+    <table><thead><tr><th>ID</th><th>Nombre</th><th>Email</th></tr></thead>
+    <tbody>${lista.map(m=>`<tr><td>${cid(m.id_medico)}</td><td>${escapeHtml(m.nombres)} ${escapeHtml(m.apellido)}</td><td>${escapeHtml(m.email)}</td></tr>`).join('')}</tbody></table>
+  ` : '<p class="empty-row">Sin médicos.</p>';
+}
+async function adminAsociarEspecialidad(){
+  const id = document.getElementById('am_medico').value;
+  const idEsp = document.getElementById('am_especialidad').value;
+  if(!id || !idEsp){ showMsg('msg_am', false, 'Completá médico y especialidad.'); return; }
+  const r = await api('PUT', `/medicos/${id}/especialidad`, {id_especialidad: Number(idEsp)});
+  showMsg('msg_am', r.ok, (r.data && (r.data.message||r.data.error)) || (r.ok?'Especialidad asociada.':'Error.'));
+}
+
+/* --- Obras sociales --- */
+function renderAdminObrasSociales(){
+  const p = document.getElementById('panel_obrassociales');
+  p.innerHTML = `
+    <div class="panel-head"><h2>Obras sociales</h2><p>Listar, crear, editar y asociar con médicos o pacientes.</p></div>
+
+    <div class="card">
+      <div class="card-head"><h3>Crear obra social</h3></div>
+      <div class="grid">
+        <div class="field-sm"><label>Nombre</label><input id="os_nombre"></div>
+        <div class="field-sm"><label>Descripción</label><input id="os_desc"></div>
+        <div class="field-sm"><label>Descuento (0 a 1, ej: 0.10)</label><input id="os_pct" value="0.10"></div>
+        <div class="field-sm"><label>Es particular</label><select id="os_part"><option value="0">No</option><option value="1">Sí</option></select></div>
+      </div>
+      <button class="btn" onclick="adminCrearObraSocial()">Crear</button>
+      <div id="msg_os" class="msg"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>Obras sociales cargadas</h3><div class="right"><button class="btn secondary sm" onclick="adminCargarObrasSociales()">Actualizar</button></div></div>
+      <div id="osTableWrap"><p class="empty-row">Cargando…</p></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-head"><h3>Asociar médico</h3></div>
+        <div class="grid" style="grid-template-columns:1fr">
+          <div class="field-sm"><label>ID obra social</label><input id="osm_obra"></div>
+          <div class="field-sm"><label>ID médico</label><input id="osm_medico"></div>
+        </div>
+        <button class="btn" onclick="adminAsociarMedicoObra()">Asociar</button>
+        <div id="msg_osm" class="msg"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Asociar paciente</h3></div>
+        <div class="grid" style="grid-template-columns:1fr">
+          <div class="field-sm"><label>ID obra social</label><input id="osp_obra"></div>
+          <div class="field-sm"><label>ID paciente</label><input id="osp_paciente"></div>
+        </div>
+        <button class="btn" onclick="adminAsociarPacienteObra()">Asociar</button>
+        <div id="msg_osp" class="msg"></div>
+      </div>
+    </div>
+  `;
+  adminCargarObrasSociales();
+}
+async function adminCrearObraSocial(){
+  const body = {
+    nombre: document.getElementById('os_nombre').value.trim(),
+    descripcion: document.getElementById('os_desc').value.trim(),
+    porcentaje_descuento: Number(document.getElementById('os_pct').value),
+    es_particular: Number(document.getElementById('os_part').value)
+  };
+  if(!body.nombre || !body.descripcion){ showMsg('msg_os', false, 'Completá nombre y descripción.'); return; }
+  const r = await api('POST', '/obras-sociales', body);
+  showMsg('msg_os', r.ok, (r.data && (r.data.message||r.data.error)) || (r.ok?'Creada.':'Error.'));
+  if(r.ok) adminCargarObrasSociales();
+}
+async function adminCargarObrasSociales(){
+  const wrap = document.getElementById('osTableWrap');
+  const r = await api('GET', '/obras-sociales');
+  const lista = (r.ok && r.data && r.data.data) ? r.data.data : [];
+  wrap.innerHTML = lista.length ? `
+    <table><thead><tr><th>ID</th><th>Nombre</th><th>Descuento</th><th>Particular</th></tr></thead>
+    <tbody>${lista.map(o=>`
+      <tr><td>${cid(o.id_obra_social)}</td><td>${escapeHtml(o.nombre)}</td><td>${(o.porcentaje_descuento*100).toFixed(0)}%</td><td>${o.es_particular?'Sí':'No'}</td></tr>
+    `).join('')}</tbody></table>
+  ` : '<p class="empty-row">Sin obras sociales.</p>';
+}
+async function adminAsociarMedicoObra(){
+  const idObra = document.getElementById('osm_obra').value;
+  const idMedico = document.getElementById('osm_medico').value;
+  if(!idObra || !idMedico){ showMsg('msg_osm', false, 'Completá ambos campos.'); return; }
+  const r = await api('POST', `/obras-sociales/${idObra}/medicos`, {id_medico: Number(idMedico)});
+  showMsg('msg_osm', r.ok, (r.data && (r.data.message||r.data.error)) || (r.ok?'Asociado.':'Error.'));
+}
+async function adminAsociarPacienteObra(){
+  const idObra = document.getElementById('osp_obra').value;
+  const idPaciente = document.getElementById('osp_paciente').value;
+  if(!idObra || !idPaciente){ showMsg('msg_osp', false, 'Completá ambos campos.'); return; }
+  const r = await api('POST', `/obras-sociales/${idObra}/pacientes`, {id_paciente: Number(idPaciente)});
+  showMsg('msg_osp', r.ok, (r.data && (r.data.message||r.data.error)) || (r.ok?'Asociado.':'Error.'));
+}
+
+/* --- Pacientes --- */
+function renderAdminPacientes(){
+  const p = document.getElementById('panel_pacientes');
+  p.innerHTML = `
+    <div class="panel-head"><h2>Pacientes</h2><p>Alta de pacientes (vincula un usuario ya registrado con una obra social) y baja lógica.</p></div>
+    <div class="card">
+      <div class="card-head"><h3>Crear paciente</h3></div>
+      <div class="grid">
+        <div class="field-sm"><label>ID usuario</label><input id="pc_usuario" placeholder="usuario ya registrado"></div>
+        <div class="field-sm"><label>ID obra social</label><input id="pc_obra"></div>
+      </div>
+      <button class="btn" onclick="adminCrearPaciente()">Crear</button>
+      <div id="msg_pc" class="msg"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Pacientes</h3><div class="right"><button class="btn secondary sm" onclick="adminCargarPacientes()">Actualizar</button></div></div>
+      <div id="pcTableWrap"><p class="empty-row">Cargando…</p></div>
+    </div>
+  `;
+  adminCargarPacientes();
+}
+async function adminCrearPaciente(){
+  const id_usuario = document.getElementById('pc_usuario').value;
+  const id_obra_social = document.getElementById('pc_obra').value;
+  if(!id_usuario || !id_obra_social){ showMsg('msg_pc', false, 'Completá ambos campos.'); return; }
+  const r = await api('POST', '/pacientes', {id_usuario:Number(id_usuario), id_obra_social:Number(id_obra_social)});
+  showMsg('msg_pc', r.ok, (r.data && (r.data.mensaje||r.data.error)) || (r.ok?'Paciente creado.':'Error.'));
+  if(r.ok) adminCargarPacientes();
+}
+async function adminCargarPacientes(){
+  const wrap = document.getElementById('pcTableWrap');
+  const r = await api('GET', '/pacientes');
+  const lista = r.ok && Array.isArray(r.data) ? r.data : [];
+  wrap.innerHTML = lista.length ? `
+    <table><thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Obra social</th><th></th></tr></thead>
+    <tbody>${lista.map(p=>`
+      <tr>
+        <td>${cid(p.id_paciente)}</td>
+        <td>${escapeHtml(p.nombres)} ${escapeHtml(p.apellido)}</td>
+        <td>${escapeHtml(p.email)}</td>
+        <td>${escapeHtml(p.descripcion_obra_social||p.id_obra_social)}</td>
+        <td><button class="btn danger sm" onclick="adminEliminarPaciente(${p.id_paciente})">Dar de baja</button></td>
+      </tr>`).join('')}</tbody></table>
+  ` : '<p class="empty-row">Sin pacientes.</p>';
+}
+async function adminEliminarPaciente(id){
+  if(!confirm('¿Dar de baja este paciente?')) return;
+  const r = await api('DELETE', `/pacientes/${id}`);
+  showMsg('msg_pc', r.ok, (r.data && (r.data.mensaje||r.data.error)) || (r.ok?'Paciente dado de baja.':'Error.'));
+  if(r.ok) adminCargarPacientes();
+}
+
+/* --- Registrar turno (admin) --- */
+function renderAdminTurnos(){
+  const p = document.getElementById('panel_turnos');
+  p.innerHTML = `
+    <div class="panel-head"><h2>Registrar turno</h2><p>Asigná un turno indicando médico, paciente, obra social y fecha.</p></div>
+    <div class="card">
+      <div class="grid">
+        <div class="field-sm"><label>ID médico</label><input id="ta_medico"></div>
+        <div class="field-sm"><label>ID paciente</label><input id="ta_paciente"></div>
+        <div class="field-sm"><label>ID obra social</label><input id="ta_obra"></div>
+        <div class="field-sm"><label>Fecha y hora</label><input id="ta_fecha" type="datetime-local"></div>
+      </div>
+      <button class="btn" onclick="adminRegistrarTurno()">Registrar</button>
+      <div id="msg_ta" class="msg"></div>
+    </div>
+  `;
+}
+async function adminRegistrarTurno(){
+  const id_medico = document.getElementById('ta_medico').value;
+  const id_paciente = document.getElementById('ta_paciente').value;
+  const id_obra_social = document.getElementById('ta_obra').value;
+  const fechaInput = document.getElementById('ta_fecha').value;
+  if(!id_medico || !id_paciente || !id_obra_social || !fechaInput){
+    showMsg('msg_ta', false, 'Completá todos los campos.'); return;
+  }
+  const fecha_hora = fechaInput.length===16 ? fechaInput+':00' : fechaInput;
+  const r = await api('POST', '/admin/turnos', {
+    id_medico:Number(id_medico), id_paciente:Number(id_paciente), id_obra_social:Number(id_obra_social), fecha_hora
+  });
+  showMsg('msg_ta', r.ok, (r.data && (r.data.message||r.data.error)) || (r.ok?'Turno registrado.':'Error.'));
+}
+
+/* --- Estadísticas --- */
+function renderAdminEstadisticas(){
+  const p = document.getElementById('panel_estadisticas');
+  p.innerHTML = `
+    <div class="panel-head"><h2>Estadísticas</h2><p>Generadas mediante stored procedures en MySQL.</p></div>
+    <div class="card">
+      <div class="card-head"><h3>Resumen general</h3><div class="right"><button class="btn secondary sm" onclick="cargarEstadisticas()">Actualizar todo</button></div></div>
+      <div id="estGeneral"><p class="empty-row">Cargando…</p></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Por médico</h3></div>
+      <div id="estMedicos"><p class="empty-row">Cargando…</p></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Por obra social</h3></div>
+      <div id="estObras"><p class="empty-row">Cargando…</p></div>
+    </div>
+  `;
+  cargarEstadisticas();
+}
+async function cargarEstadisticas(){
+  const rGen = await api('GET', '/estadisticas');
+  const gen = (rGen.ok && rGen.data && rGen.data.data && rGen.data.data[0]) || null;
+  document.getElementById('estGeneral').innerHTML = gen ? `
+    <div class="grid">
+      <div><div style="font-size:11px;color:var(--muted)">Total de turnos</div><div style="font-size:22px;font-family:var(--serif)">${gen.total_turnos}</div></div>
+      <div><div style="font-size:11px;color:var(--muted)">Atendidos</div><div style="font-size:22px;font-family:var(--serif)">${gen.turnos_atendidos}</div></div>
+      <div><div style="font-size:11px;color:var(--muted)">Pendientes</div><div style="font-size:22px;font-family:var(--serif)">${gen.turnos_pendientes}</div></div>
+      <div><div style="font-size:11px;color:var(--muted)">Facturado</div><div style="font-size:22px;font-family:var(--serif)">$${Number(gen.total_facturado||0).toFixed(2)}</div></div>
+    </div>` : '<p class="empty-row">Sin datos.</p>';
+
+  const rMed = await api('GET', '/estadisticas/medicos');
+  const listaMed = (rMed.ok && rMed.data && rMed.data.data) || [];
+  document.getElementById('estMedicos').innerHTML = listaMed.length ? `
+    <table><thead><tr><th>Médico</th><th>Especialidad</th><th>Turnos</th><th>Atendidos</th><th>Facturado</th></tr></thead>
+    <tbody>${listaMed.map(m=>`<tr><td>${escapeHtml(m.medico_nombre)} ${escapeHtml(m.medico_apellido)}</td><td>${escapeHtml(m.especialidad)}</td><td>${m.total_turnos}</td><td>${m.turnos_atendidos}</td><td>$${Number(m.total_facturado||0).toFixed(2)}</td></tr>`).join('')}</tbody></table>
+  ` : '<p class="empty-row">Sin datos.</p>';
+
+  const rObr = await api('GET', '/estadisticas/obras-sociales');
+  const listaObr = (rObr.ok && rObr.data && rObr.data.data) || [];
+  document.getElementById('estObras').innerHTML = listaObr.length ? `
+    <table><thead><tr><th>Obra social</th><th>Turnos</th><th>Atendidos</th><th>Facturado</th></tr></thead>
+    <tbody>${listaObr.map(o=>`<tr><td>${escapeHtml(o.obra_social)}</td><td>${o.total_turnos}</td><td>${o.turnos_atendidos}</td><td>$${Number(o.total_facturado||0).toFixed(2)}</td></tr>`).join('')}</tbody></table>
+  ` : '<p class="empty-row">Sin datos.</p>';
+}
+
+/* --- Reportes --- */
+function renderAdminReportes(){
+  const p = document.getElementById('panel_reportes');
+  p.innerHTML = `
+    <div class="panel-head"><h2>Reportes</h2><p>Generá el PDF de turnos de un paciente puntual.</p></div>
+    <div class="card">
+      <div class="grid">
+        <div class="field-sm"><label>ID paciente</label><input id="rp_id"></div>
+      </div>
+      <button class="btn" onclick="adminGenerarReporte()">Generar PDF</button>
+      <div id="msg_rp" class="msg"></div>
+    </div>
+  `;
+}
+async function adminGenerarReporte(){
+  const id = document.getElementById('rp_id').value;
+  if(!id){ showMsg('msg_rp', false, 'Indicá un ID de paciente.'); return; }
+  try{
+    const headers = {};
+    if(TOKEN) headers['Authorization'] = 'Bearer '+TOKEN;
+    const res = await fetch(getBase()+`/reportes/paciente/${id}`, {headers});
+    if(!res.ok){
+      const t = await res.json().catch(()=>({}));
+      showMsg('msg_rp', false, t.error || 'No se pudo generar el reporte.');
+      return;
+    }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    showMsg('msg_rp', true, 'PDF generado y abierto en una pestaña nueva.');
+  }catch(e){
+    showMsg('msg_rp', false, 'Error de conexión.');
+  }
+}
+</script>
+</body>
+</html>
