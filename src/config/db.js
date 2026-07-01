@@ -3,6 +3,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+<<<<<<< HEAD
+=======
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+
+>>>>>>> nueva-rama-andrea
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,

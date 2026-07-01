@@ -60,6 +60,7 @@ const createTurno = async ({ id_medico, id_paciente, id_obra_social, fecha_hora,
   }
 };
 
+<<<<<<< HEAD
 const updateTurno = async (id_turno_reserva, { id_medico, id_obra_social, fecha_hora }) => {
   const [result] = await pool.query(
     `UPDATE turnos_reservas
@@ -69,11 +70,17 @@ const updateTurno = async (id_turno_reserva, { id_medico, id_obra_social, fecha_
   );
   return result.affectedRows > 0;
 };
+=======
+>>>>>>> nueva-rama-andrea
 
 
 export {
   findTurnoByMedicoAndFecha,
   findTurnosByPaciente,
+<<<<<<< HEAD
   createTurno,
   updateTurno
+=======
+  createTurno
+>>>>>>> nueva-rama-andrea
 };

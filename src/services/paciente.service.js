@@ -30,6 +30,7 @@ export const eliminarLogico = async (id) => {
 };
 
 
+<<<<<<< HEAD
 export const asignarObraSocial = async (id_paciente, id_obra_social) => {
   const existe = await pacienteRepo.findById(id_paciente);
   if (!existe) throw new Error('Paciente no encontrado');
@@ -39,3 +40,5 @@ export const asignarObraSocial = async (id_paciente, id_obra_social) => {
     id_obra_social
   );
 };
+=======
+>>>>>>> nueva-rama-andrea

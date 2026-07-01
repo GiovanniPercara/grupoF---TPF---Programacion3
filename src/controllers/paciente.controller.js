@@ -110,6 +110,7 @@ export const remove = async (req, res) => {
     });
   }
 };
+<<<<<<< HEAD
 
 // ASOCIAR OBRA SOCIAL A PACIENTE
 export const asociarPacienteObraSocialController = async (req, res) => {
@@ -138,3 +139,5 @@ export const asociarPacienteObraSocialController = async (req, res) => {
     });
   }
 };
+=======
+>>>>>>> nueva-rama-andrea

@@ -68,6 +68,7 @@ const softDelete = async (id) => {
 };
 
 
+<<<<<<< HEAD
 const assignObraSocial = async (id_paciente, id_obra_social) => {
   const [result] = await pool.query(
     `UPDATE pacientes
@@ -79,6 +80,8 @@ const assignObraSocial = async (id_paciente, id_obra_social) => {
   return result.affectedRows > 0;
 };
 
+=======
+>>>>>>> nueva-rama-andrea
 
 export {
   findAll,
@@ -86,6 +89,10 @@ export {
   findByUsuarioId,
   save,
   update,
+<<<<<<< HEAD
   softDelete,
   assignObraSocial
+=======
+  softDelete
+>>>>>>> nueva-rama-andrea
 };

@@ -3,6 +3,11 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
+<<<<<<< HEAD
+=======
+import path from 'path';
+import { fileURLToPath } from 'url';
+>>>>>>> nueva-rama-andrea
 
 import swaggerSpec from './swagger.js';
 import authRoutes from './routes/v1/auth.routes.js';
@@ -12,10 +17,18 @@ import pacientesRoutes from './routes/v1/paciente.routes.js';
 import turnosRoutes from './routes/v1/turno.routes.js';
 import turnosMedicoRoutes from './routes/v1/turnosMedico.routes.js';
 import turnoAdminRoutes from './routes/v1/turnoAdmin.routes.js';
+<<<<<<< HEAD
 import adminRoutes from './routes/v1/admin.routes.js';
 import estadisticasRoutes from './routes/v1/estadisticas.routes.js';
 import reporteRoutes from './routes/v1/reporte.routes.js';
 
+=======
+import obrasSocialesRoutes from './routes/v1/obrasSociales.routes.js';
+import estadisticasRoutes from './routes/v1/estadisticas.routes.js';
+import reporteRoutes from './routes/v1/reporte.routes.js';
+
+
+>>>>>>> nueva-rama-andrea
 dotenv.config();
 
 const app = express();
@@ -27,8 +40,12 @@ app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+<<<<<<< HEAD
 app.get('/', (req, res) => res.send('Servidor funcionando 🚀'));
 
+=======
+app.use(express.static('public'));
+>>>>>>> nueva-rama-andrea
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/especialidades', especialidadesRoutes);
 app.use('/api/v1/medicos', medicosRoutes);
@@ -36,7 +53,11 @@ app.use('/api/v1/pacientes', pacientesRoutes);
 app.use('/api/v1/turnos', turnosRoutes);
 app.use('/api/v1/turnos-medico', turnosMedicoRoutes);
 app.use('/api/v1/admin/turnos', turnoAdminRoutes);
+<<<<<<< HEAD
 app.use('/api/v1/admin', adminRoutes);
+=======
+app.use('/api/v1/obras-sociales', obrasSocialesRoutes);
+>>>>>>> nueva-rama-andrea
 app.use('/api/v1/estadisticas', estadisticasRoutes);
 app.use('/api/v1/reportes', reporteRoutes);
 

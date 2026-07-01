@@ -32,6 +32,7 @@ const crearTurnoValidator = [check('id_medico')
     .notEmpty().withMessage('El valor total es obligatorio')
     .isDecimal().withMessage('El valor total debe ser un número decimal'),
 ];
+<<<<<<< HEAD
 const editarTurnoValidator = [ check('id_medico')
     .optional()
     .isNumeric()
@@ -65,4 +66,8 @@ const editarTurnoValidator = [ check('id_medico')
 export {
   crearTurnoValidator,
   editarTurnoValidator
+=======
+export {
+  crearTurnoValidator
+>>>>>>> nueva-rama-andrea
 };

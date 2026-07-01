@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
+<<<<<<< HEAD
 -- Tiempo de generación: 30-06-2026 a las 04:53:39
+=======
+-- Tiempo de generación: 30-06-2026 a las 19:52:42
+>>>>>>> nueva-rama-andrea
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -104,18 +108,31 @@ CREATE TABLE `medicos` (
   `id_especialidad` int(10) UNSIGNED NOT NULL,
   `matricula` int(10) UNSIGNED NOT NULL,
   `descripcion` text DEFAULT NULL,
+<<<<<<< HEAD
   `valor_consulta` decimal(10,2) NOT NULL
+=======
+  `valor_consulta` decimal(10,2) NOT NULL,
+  `activo` tinyint(1) UNSIGNED NOT NULL DEFAULT 1
+>>>>>>> nueva-rama-andrea
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `medicos`
 --
 
+<<<<<<< HEAD
 INSERT INTO `medicos` (`id_medico`, `id_usuario`, `id_especialidad`, `matricula`, `descripcion`, `valor_consulta`) VALUES
 (1, 1, 1, 1000, 'test', 5000.00),
 (2, 2, 4, 2000, 'test', 5000.00),
 (3, 3, 3, 3000, 'test', 10000.00),
 (4, 4, 1, 4000, 'test', 15000.00);
+=======
+INSERT INTO `medicos` (`id_medico`, `id_usuario`, `id_especialidad`, `matricula`, `descripcion`, `valor_consulta`, `activo`) VALUES
+(1, 1, 1, 1000, 'test', 5000.00, 1),
+(2, 2, 4, 2000, 'test', 5000.00, 1),
+(3, 3, 3, 3000, 'test', 10000.00, 1),
+(4, 4, 1, 4000, 'test', 15000.00, 1);
+>>>>>>> nueva-rama-andrea
 
 -- --------------------------------------------------------
 
@@ -164,10 +181,17 @@ CREATE TABLE `obras_sociales` (
 --
 
 INSERT INTO `obras_sociales` (`id_obra_social`, `nombre`, `descripcion`, `porcentaje_descuento`, `es_particular`, `activo`) VALUES
+<<<<<<< HEAD
 (1, 'JERARQUICOS', 'jerarquicos plus', 10.00, 0, 1),
 (2, 'OSUNER', 'osu', 10.00, 0, 1),
 (3, 'OSECAC', 'ose', 11.00, 0, 1),
 (4, 'OSUNER 3', 'OSU', 13.00, 0, 1),
+=======
+(1, 'JERARQUICOS', 'jerarquicos plus', 0.10, 0, 1),
+(2, 'OSUNER', 'osu', 0.10, 0, 1),
+(3, 'OSECAC', 'ose', 0.11, 0, 1),
+(4, 'OSUNER 3', 'OSU', 0.13, 0, 1),
+>>>>>>> nueva-rama-andrea
 (5, 'OSDE', 'Obra social OSDE', 0.30, 0, 1);
 
 -- --------------------------------------------------------
@@ -470,4 +494,8 @@ COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+<<<<<<< HEAD
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+=======
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+>>>>>>> nueva-rama-andrea

@@ -28,12 +28,20 @@ const loginController = async (req, res) => {
 
 const registerController = async (req, res) => {
   try {
+<<<<<<< HEAD
     // Si el usuario subió una foto, construimos la ruta para guardarla en la base de datos, si no, dejamos el campo vacío
+=======
+  
+>>>>>>> nueva-rama-andrea
     const fotoPath = req.file ? `/uploads/${req.file.filename}` : '';
 
     const { documento, nombres, apellido, email, password } = req.body;
 
+<<<<<<< HEAD
     // Mandamos al servicio todos los datos del formulario de texto sumando la ruta de la foto_path
+=======
+  
+>>>>>>> nueva-rama-andrea
     const usuario = await register({ 
       documento, 
       nombres, 

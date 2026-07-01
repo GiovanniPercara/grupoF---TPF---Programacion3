@@ -19,8 +19,13 @@ const findByDocumento = async (documento) => {
 const createUsuario = async ({ documento, nombres, apellido, email, hash, foto_path }) => {
   const [result] = await pool.query(
     `INSERT INTO usuarios (documento, nombres, apellido, email, contrasenia, foto_path, rol, activo)
+<<<<<<< HEAD
      VALUES (?, ?, ?, ?, ?, ?, 2, 1)`, // Cambiamos el '' por un signo de pregunta (?)
     [documento, nombres, apellido, email, hash, foto_path] // Sumamos foto_path acá
+=======
+     VALUES (?, ?, ?, ?, ?, ?, 2, 1)`, 
+    [documento, nombres, apellido, email, hash, foto_path] 
+>>>>>>> nueva-rama-andrea
   );
   return result.insertId;
 };

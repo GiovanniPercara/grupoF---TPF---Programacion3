@@ -5,6 +5,20 @@ const findAll = async () => {
   return rows;
 };
 
+<<<<<<< HEAD
+=======
+const findById = async (id_medico) => {
+  const [rows] = await pool.query(
+    `SELECT m.id_medico, m.valor_consulta
+     FROM medicos m
+     JOIN usuarios u ON m.id_usuario = u.id_usuario
+     WHERE m.id_medico = ? AND u.activo = 1`,
+    [id_medico]
+  );
+  return rows[0] || null;
+};
+
+>>>>>>> nueva-rama-andrea
 const findByEspecialidad = async (id_especialidad) => {
   const [rows] = await pool.query(
     `SELECT v.* FROM v_medicos v
@@ -23,4 +37,8 @@ const actualizarEspecialidad = async (id_medico, id_especialidad) => {
   return result.affectedRows > 0;
 };
 
+<<<<<<< HEAD
 export { findAll, findByEspecialidad, actualizarEspecialidad };
+=======
+export { findAll, findById, findByEspecialidad, actualizarEspecialidad };
+>>>>>>> nueva-rama-andrea

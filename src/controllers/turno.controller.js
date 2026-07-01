@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 import { crearTurno, listarTurnosPaciente, editarTurno } from '../services/turno.service.js';
 
 const crearTurnoController = async (req, res) => {
   try {
     const { id_medico, id_obra_social, fecha_hora, valor_total } = req.body;
+=======
+import { crearTurno, listarTurnosPaciente } from '../services/turno.service.js';
+
+const crearTurnoController = async (req, res) => {
+  try {
+    const { id_medico, id_obra_social, fecha_hora } = req.body;
+>>>>>>> nueva-rama-andrea
 
     const id_paciente_usuario = req.usuario.id_usuario;
 
@@ -10,8 +18,12 @@ const crearTurnoController = async (req, res) => {
       id_medico,
       id_paciente_usuario,
       id_obra_social,
+<<<<<<< HEAD
       fecha_hora,
       valor_total
+=======
+      fecha_hora
+>>>>>>> nueva-rama-andrea
     });
 
     return res.status(201).json({
@@ -31,13 +43,22 @@ const crearTurnoController = async (req, res) => {
       });
     }
 
+<<<<<<< HEAD
     if (error.message === 'Paciente no encontrado') {
+=======
+    if (error.message === 'Paciente no encontrado' ||
+        error.message === 'Médico no encontrado' ||
+        error.message === 'Obra social no encontrada') {
+>>>>>>> nueva-rama-andrea
       return res.status(404).json({
         ok: false,
         error: error.message
       });
     }
+<<<<<<< HEAD
   
+=======
+>>>>>>> nueva-rama-andrea
 
     return res.status(500).json({
       ok: false,
@@ -77,6 +98,7 @@ const listarTurnosController = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 const editarTurnoController = async (req,res) => {
   try {
     const { id } = req.params;
@@ -136,4 +158,9 @@ export {
   crearTurnoController,
   listarTurnosController,
   editarTurnoController
+=======
+export {
+  crearTurnoController,
+  listarTurnosController
+>>>>>>> nueva-rama-andrea
 }

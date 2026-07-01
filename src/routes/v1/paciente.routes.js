@@ -91,9 +91,23 @@ import express from 'express';
 import * as pacienteCtrl from '../../controllers/paciente.controller.js';
 import { pacienteValidator } from '../../middlewares/paciente.validator.js';
 import validate from '../../middlewares/validate.js';
+<<<<<<< HEAD
 
 const router = express.Router();
 
+=======
+import { verificarToken } from '../../middlewares/auth.middleware.js';
+import { soloAdmin } from '../../middlewares/admin.middleware.js';
+
+const router = express.Router();
+
+// Gestión de pacientes: alta, listado, edición y baja lógica.
+// Se restringe a Admin porque es la base para "Asociar pacientes con obras sociales",
+// función exclusiva del rol Administrador según el enunciado.
+router.use(verificarToken);
+router.use(soloAdmin);
+
+>>>>>>> nueva-rama-andrea
 router.get('/', pacienteCtrl.getAll);
 router.get('/:id', pacienteCtrl.getOne);
 router.post('/', pacienteValidator, validate, pacienteCtrl.create);

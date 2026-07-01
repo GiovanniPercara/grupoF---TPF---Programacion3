@@ -1,6 +1,5 @@
 import { check } from 'express-validator';
 
-<<<<<<< HEAD
 export const obraSocialValidator = [
   check('nombre')
     .notEmpty().withMessage('El nombre es obligatorio')
@@ -12,7 +11,7 @@ export const obraSocialValidator = [
     .trim(),
   check('porcentaje_descuento')
     .notEmpty().withMessage('El porcentaje de descuento es obligatorio')
-    .isFloat({ min: 0, max: 100 }).withMessage('El porcentaje debe estar entre 0 y 100'),
+    .isFloat({ min: 0, max: 1 }).withMessage('El porcentaje debe ser una fracción entre 0 y 1 (ej: 0.10 = 10% de descuento)'),
   check('es_particular')
     .notEmpty().withMessage('Debe indicar si es particular')
     .isIn([0, 1, true, false]).withMessage('es_particular debe ser 0 o 1'),
@@ -28,13 +27,4 @@ export const asociarPacienteObraSocialValidator = [
   check('id_paciente')
     .notEmpty().withMessage('El paciente es obligatorio')
     .isNumeric().withMessage('El paciente debe ser un número'),
-];
-
-=======
->>>>>>> nueva-rama-andrea
-export const especialidadValidator = [
-  check('nombre')
-    .notEmpty().withMessage('El nombre es obligatorio')
-    .isLength({ min: 3, max: 120 }).withMessage('El nombre debe tener entre 3 y 120 caracteres')
-    .trim(),
 ];

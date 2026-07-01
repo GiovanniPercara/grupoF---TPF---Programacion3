@@ -1,13 +1,22 @@
 import * as turnoRepository from '../repositories/turno.repository.js';
 
 import * as pacienteRepository from '../repositories/paciente.repository.js';
+<<<<<<< HEAD
+=======
+import * as medicoRepository from '../repositories/medicos.repository.js';
+import * as obraSocialRepository from '../repositories/obrasSociales.repository.js';
+>>>>>>> nueva-rama-andrea
 
 const crearTurno = async ({
   id_medico,
   id_paciente_usuario,
   id_obra_social,
+<<<<<<< HEAD
   fecha_hora,
   valor_total
+=======
+  fecha_hora
+>>>>>>> nueva-rama-andrea
 }) => {
 
   const paciente = await pacienteRepository
@@ -17,6 +26,19 @@ const crearTurno = async ({
     throw new Error('Paciente no encontrado');
   }
 
+<<<<<<< HEAD
+=======
+  const medico = await medicoRepository.findById(id_medico);
+  if (!medico) {
+    throw new Error('Médico no encontrado');
+  }
+
+  const obraSocial = await obraSocialRepository.findById(id_obra_social);
+  if (!obraSocial) {
+    throw new Error('Obra social no encontrada');
+  }
+
+>>>>>>> nueva-rama-andrea
   const turnoExiste = await turnoRepository
     .findTurnoByMedicoAndFecha(
       id_medico,
@@ -29,6 +51,13 @@ const crearTurno = async ({
     );
   }
 
+<<<<<<< HEAD
+=======
+  const valor_total = obraSocial.es_particular === 1
+    ? medico.valor_consulta
+    : medico.valor_consulta - (obraSocial.porcentaje_descuento * medico.valor_consulta);
+
+>>>>>>> nueva-rama-andrea
   const id_turno_reserva =
     await turnoRepository.createTurno({
       id_medico,
@@ -66,6 +95,7 @@ const listarTurnosPaciente = async (
     );
 };
 
+<<<<<<< HEAD
 const editarTurno = async (
   id_turno_reserva,
   {
@@ -110,4 +140,9 @@ export {
   crearTurno,
   listarTurnosPaciente,
   editarTurno
+=======
+export {
+  crearTurno,
+  listarTurnosPaciente
+>>>>>>> nueva-rama-andrea
 };

@@ -2,7 +2,14 @@ import pool from '../config/db.js';
 
 const findMedicoById = async (id_medico) => {
   const [rows] = await pool.query(
+<<<<<<< HEAD
     `SELECT id_medico, valor_consulta FROM medicos WHERE id_medico = ?`,
+=======
+    `SELECT m.id_medico, m.valor_consulta
+     FROM medicos m
+     JOIN usuarios u ON m.id_usuario = u.id_usuario
+     WHERE m.id_medico = ? AND u.activo = 1`,
+>>>>>>> nueva-rama-andrea
     [id_medico]
   );
   return rows[0] || null;
@@ -10,7 +17,14 @@ const findMedicoById = async (id_medico) => {
 
 const findPacienteById = async (id_paciente) => {
   const [rows] = await pool.query(
+<<<<<<< HEAD
     `SELECT id_paciente FROM pacientes WHERE id_paciente = ?`,
+=======
+    `SELECT p.id_paciente
+     FROM pacientes p
+     JOIN usuarios u ON p.id_usuario = u.id_usuario
+     WHERE p.id_paciente = ? AND u.activo = 1`,
+>>>>>>> nueva-rama-andrea
     [id_paciente]
   );
   return rows[0] || null;
